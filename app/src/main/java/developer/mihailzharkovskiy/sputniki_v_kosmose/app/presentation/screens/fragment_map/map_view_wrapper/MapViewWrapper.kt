@@ -85,7 +85,7 @@ class MapViewWrapper(
             overlayManager.tilesOverlay.loadingLineColor = backgroundColor
             overlayManager.tilesOverlay.setColorFilter(getColorFilter())
             setScrollableAreaLimitLatitude(maxLat, minLat, 0)
-            // add overlays: 0 - GPS, 1 - SatTrack, 2 - SatGranici, 3 - SatMarkers
+            // add overlays: 0 - Coordinates, 1 - SatTrack, 2 - SatStroke, 3 - SatMarkers
             overlays.addAll(Array(4) { FolderOverlay() })
         }
     }
@@ -104,7 +104,7 @@ class MapViewWrapper(
             try {
                 position = GeoPoint(satellite.latitude, satellite.longitude)
             } catch (e: Exception) {
-                Log.d("error_cordinate", "${e.message}")
+                Log.d("error_coordinate", "${e.message}")
             }
         }
     }
@@ -121,7 +121,7 @@ class MapViewWrapper(
             try {
                 position = GeoPoint(satellite.latitude, satellite.longitude)
             } catch (e: Exception) {
-                Log.d("error_sat_coordinate", "${e.message}")
+                Log.d("error_coordinate", "${e.message}")
             }
         }
     }

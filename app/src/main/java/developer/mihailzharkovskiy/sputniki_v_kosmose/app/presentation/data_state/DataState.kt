@@ -3,7 +3,7 @@ package developer.mihailzharkovskiy.sputniki_v_kosmose.app.presentation.data_sta
 
 data class DataState<out T>(val status: Status, val data: T?, val message: String?) {
     companion object {
-        fun <T> succes(data: T): DataState<T> {
+        fun <T> success(data: T): DataState<T> {
             return DataState(status = Status.SUCCESS, data = data, message = null)
         }
 

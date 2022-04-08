@@ -28,13 +28,12 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SatelliteDataViewModel @Inject constructor(
-    private val compas: Compass,
-    private val suserLocation: UserLocationSource,
+    private val userLocation: UserLocationSource,
     private val satPositionUseCase: SatellitePositionUseCase,
     private val resource: Resource,
 ) : ViewModel(), Compass.AzimuthListener {
 
-    private val userPos = suserLocation.getUserLocation()
+    private val userPos = userLocation.getUserLocation()
 
     private val _progress = MutableStateFlow<SatelliteDataUiState>(SatelliteDataUiState.NoData)
     val progress: StateFlow<SatelliteDataUiState> get() = _progress.asStateFlow()
@@ -42,8 +41,8 @@ class SatelliteDataViewModel @Inject constructor(
     private val _compassEvent = MutableStateFlow<CompassEvent>(CompassEvent.NoData)
     val compassEvent: StateFlow<CompassEvent> = _compassEvent
 
-
-    fun initLaunchDataForScreen(satellite: SatAboveTheUserDomainModel): SatelliteDataInitUiModel {
+    fun initScreen(satellite: SatAboveTheUserDomainModel): SatelliteDataInitUiModel {
+        sendPassData(satellite)
         return satellite.mapToInitUiModel(resource)
     }
 
@@ -54,7 +53,7 @@ class SatelliteDataViewModel @Inject constructor(
         return ((deltaNow / deltaTotal) * 100)
     }
 
-    private suspend fun getSatData(
+    private suspend fun getSatelliteData(
         sat: Satellite,
         userPos: Coordinates,
         date: Date,
@@ -63,15 +62,15 @@ class SatelliteDataViewModel @Inject constructor(
         return satPos.mapToSatDataUiModel(resource)
     }
 
-    fun sendPassData(satPass: SatAboveTheUserDomainModel) {
+    private fun sendPassData(satPass: SatAboveTheUserDomainModel) {
         viewModelScope.launch {
             while (isActive) {
-                val data = getSatData(satPass.satellite, userPos, Date())
+                val data = getSatelliteData(satPass.satellite, userPos, Date())
                 val progress = calculateProgress(satPass.startTime, satPass.endTime)
                 val state = if (progress.toInt() in 1 until 100) {
-                    SatelliteDataUiState.SatVisible(progress, DataState.succes(data))
+                    SatelliteDataUiState.SatVisible(progress, DataState.success(data))
                 } else {
-                    SatelliteDataUiState.SatInvisible(DataState.succes(data))
+                    SatelliteDataUiState.SatInvisible(DataState.success(data))
                 }
                 _progress.value = state
                 delay(1000)

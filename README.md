@@ -2,6 +2,10 @@
 
 ___
 
+[![](https://w7.pngwing.com/pngs/733/638/png-transparent-google-play-text-google-play-android-app-store-google-play-text-logo-sign.png)](https://play.google.com/store/apps/details?id=developer.mihailzharkovskiy.sputniki_v_kosmose&hl=ru&gl=US)
+
+___
+
 ### Приложений позволяет в реальном времени отслеживать нахожение спутников.
 
 ### **особенности приложения:**
@@ -22,7 +26,6 @@ ___
 ___
 
 ### технологии:
-
 - язык - **kotlin**
 
 - архетектура - **clean, mvvm**
@@ -35,7 +38,7 @@ ___
 
 - di - hilt
 
-- jetpack - **view binding, lifecycle, navigation component**
+- jetpack - **view binding, lifecycle, navigation component**,
 
 - **SOLID, KISS, DRY**
 

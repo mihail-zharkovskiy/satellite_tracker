@@ -35,7 +35,6 @@ class SatelliteDataFragment : BaseFragment<FragmentSatelliteDataBinding>() {
     @Inject
     lateinit var compass: Compass
 
-    //    private val stringUriSearch by lazy { requireContext().getString(R.string.dsf_uri_search_sputnik) }
     private val viewModel: SatelliteDataViewModel by viewModels()
 
     override fun initBinding(
@@ -65,13 +64,12 @@ class SatelliteDataFragment : BaseFragment<FragmentSatelliteDataBinding>() {
 
     private fun initScreen() {
         arguments?.getParcelable<SatAboveTheUserDomainModel>(KEY_SPUTNIK)?.let { satellite ->
-            val data = viewModel.initLaunchDataForScreen(satellite)
+            val data = viewModel.initScreen(satellite)
             binding.tvSputnikNazvanie.text = data.satName
             binding.tvSputnikAzimutEnd.text = data.azimuthEnd
             binding.tvSputnikAzimutStart.text = data.azimuthStart
             binding.ivBack.setOnClickListener { findNavController().popBackStack() }
             binding.btnPosmotretNaKarte.setOnClickListener { seeOnTheMap(satellite) }
-            viewModel.sendPassData(satellite)
         } ?: requireContext().toast("no data")
 
         binding.btnInformOSptnike.setOnClickListener { getInfoFromBrowser() }
@@ -80,13 +78,13 @@ class SatelliteDataFragment : BaseFragment<FragmentSatelliteDataBinding>() {
     private fun observeStates() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                launch { viewModel.compassEvent.collect { event -> applyCompasEvent(event) } }
+                launch { viewModel.compassEvent.collect { event -> applyCompassEvent(event) } }
                 launch { viewModel.progress.collect { state -> applyUiState(state) } }
             }
         }
     }
 
-    private fun applyCompasEvent(event: CompassEvent) {
+    private fun applyCompassEvent(event: CompassEvent) {
         when (event) {
             is CompassEvent.Data -> {
                 binding.tvKompasAzimut.text = event.azimuthString
@@ -142,10 +140,8 @@ class SatelliteDataFragment : BaseFragment<FragmentSatelliteDataBinding>() {
     }
 
     private fun getInfoFromBrowser() {
-//        val uri = Uri.parse("$stringUriSearch ${binding.tvSputnikNazvanie.text}")
-        val uri = Uri.parse(
-            "${getString(R.string.dsf_uri_search_sputnik)} ${binding.tvSputnikNazvanie.text}"
-        )
+        val stringUriSearch = getString(R.string.dsf_uri_search_sputnik)
+        val uri = Uri.parse("$stringUriSearch ${binding.tvSputnikNazvanie.text}")
         val intent = Intent(Intent.ACTION_VIEW, uri)
         intent.addCategory(Intent.CATEGORY_BROWSABLE)
         startActivity(intent)

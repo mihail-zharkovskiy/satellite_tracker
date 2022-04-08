@@ -43,9 +43,9 @@ class SatAboveTheUserViewModel @Inject constructor(
             satAboveTheUserUseCase.satAboveTheUser.collect { state ->
                 when (state.status) {
                     Status.SUCCESS -> {
-                        _uiState.value = DataState.succes(state.data!!.map {
-                            it.mapToSatAboveTheUserUiModel(resource)
-                        })
+                        /**здесь дата точно не null, смотри [DataState.success]**/
+                        val data = state.data!!.map { it.mapToSatAboveTheUserUiModel(resource) }
+                        _uiState.value = DataState.success(data)
                     }
                     Status.LOADING -> {
                         _uiState.value = DataState.loading()
@@ -59,7 +59,7 @@ class SatAboveTheUserViewModel @Inject constructor(
         }
     }
 
-    fun trigerEvent(userEvent: SatAboveTheUserEvent) {
+    fun handleEvent(userEvent: SatAboveTheUserEvent) {
         when (userEvent) {
             is SatAboveTheUserEvent.RefreshData -> {
                 userLocation.updateUserLocation()
@@ -87,13 +87,8 @@ class SatAboveTheUserViewModel @Inject constructor(
 
     private fun calculateData() {
         viewModelScope.launch {
-            satAboveTheUserUseCase.calculateData(/*viewModelScope*/)
+            satAboveTheUserUseCase.calculateData()
         }
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        //НЕ ВЫЗЫВАЕТСЯ ПРИ ПЕРЕХОДЕ НА ДРУШОЙ ЭКРАН
     }
 }
 

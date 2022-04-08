@@ -1,4 +1,4 @@
-package developer.mihailzharkovskiy.sputniki_v_kosmose.app.di.module
+package developer.mihailzharkovskiy.sputniki_v_kosmose.app.di
 
 import android.content.Context
 import androidx.annotation.Keep
@@ -17,7 +17,6 @@ import developer.mihailzharkovskiy.sputniki_v_kosmose.app.data.sources.local_sou
 import developer.mihailzharkovskiy.sputniki_v_kosmose.app.data.sources.local_source.database.SatelliteDataBase
 import developer.mihailzharkovskiy.sputniki_v_kosmose.app.data.sources.remote_sorce.SatellitesRemoteSourceImpl
 import developer.mihailzharkovskiy.sputniki_v_kosmose.app.data.sources.remote_sorce.network.SatellitesRetrofitService
-import developer.mihailzharkovskiy.sputniki_v_kosmose.app.di.module.dispatchers.IoDispatcher
 import developer.mihailzharkovskiy.sputniki_v_kosmose.app.domain.SatelliteRepository
 import kotlinx.coroutines.CoroutineDispatcher
 import retrofit2.Retrofit

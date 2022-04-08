@@ -27,7 +27,7 @@ data class SatAboveTheUserDomainModel(
 
     val satId: Int = satellite.tle.idSatellite,
     val name: String = satellite.tle.name,
-    val isDeepSpace: Boolean = satellite.tle.isDeepspace,
+    val isDeepSpace: Boolean = satellite.tle.isDeepSpace,
 ) : Parcelable {
 
 }

@@ -1,7 +1,5 @@
 package developer.mihailzharkovskiy.sputniki_v_kosmose.app.presentation.screens.fragment_map
 
-//import developer.mihailzharkovskiy.sputniki_v_kosmose.app.presentation.screens.fragment_map.model.convertLatitudeForMap
-//import developer.mihailzharkovskiy.sputniki_v_kosmose.app.presentation.screens.fragment_map.model.convertLongitudeForMap
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -28,19 +26,18 @@ import javax.inject.Inject
 /**первым делом при создании всегда вызывай [initViewModel]**/
 @HiltViewModel
 class MapViewModel @Inject constructor(
-    private val userLocation: UserLocationSource,
+    private val userLocationSource: UserLocationSource,
     private val repository: SatelliteRepository,
     private val satPositionUseCase: SatellitePositionUseCase,
     private val resource: Resource,
 ) : ViewModel() {
 
-    private val delayUpdate: Long = 1000
     private var updateJob: Job? = null
+    private val delayUpdateData: Long = 1000
 
     private var selectedSat: Satellite? = null
     private var satellites: List<Satellite> = emptyList()
-    private var userLocatio = Coordinates(0.0, 0.0)
-
+    private var userLocation = Coordinates(0.0, 0.0)
 
     private val _uiState = MutableStateFlow<DataState<MapUiData>>(DataState.loading())
     val uiState: StateFlow<DataState<MapUiData>> get() = _uiState.asStateFlow()
@@ -52,8 +49,8 @@ class MapViewModel @Inject constructor(
     fun initViewModel(idSatellite: Int? = null) {
         updateUserLocation()
         viewModelScope.launch {
-            getSatellites().join()
-            getSelectedSat(satellites, idSatellite).join()
+            getSatellites()//.join()
+            getSelectedSat(satellites, idSatellite)//.join()
         }
     }
 
@@ -63,13 +60,10 @@ class MapViewModel @Inject constructor(
     }
 
     fun updateUserLocation() {
-        when (val result = userLocation.updateUserLocation()) {
+        when (val result = userLocationSource.updateUserLocation()) {
             is UpdateUserLocationState.Success -> {
-                userLocatio = Coordinates(
-                    latitude = /*convertLatitudeForMap(*/result.coordinate.latitude/*)*/,
-                    longitude =/* convertLongitudeForMap(*/result.coordinate.longitude/*)*/
-                )
-                _userLocationState.value = UpdateUserLocationState.Success(userLocatio)
+                userLocation = Coordinates(result.coordinate.latitude, result.coordinate.longitude)
+                _userLocationState.value = UpdateUserLocationState.Success(userLocation)
             }
             is UpdateUserLocationState.Error -> {
                 _userLocationState.value = UpdateUserLocationState.Error(result.message)
@@ -80,28 +74,28 @@ class MapViewModel @Inject constructor(
         }
     }
 
-    fun pereklchitsyaNaSptnikVpered() {
+    fun switchToSatelliteNext() {
         if (satellites.isNotEmpty()) {
             val index = satellites.indexOf(selectedSat)
             if (index < satellites.size - 1) {
                 selectedSat = satellites[index + 1]
-                renderSatelitesData()
+                renderSatellitesData()
             } else {
                 selectedSat = satellites[0]
-                renderSatelitesData()
+                renderSatellitesData()
             }
         }
     }
 
-    fun pereklchitsyaNaSptnikNazad() {
+    fun switchToSatelliteBack() {
         if (satellites.isNotEmpty()) {
             val index = satellites.indexOf(selectedSat)
             if (index > 0) {
                 selectedSat = satellites[index - 1]
-                renderSatelitesData(delayUpdate)
+                renderSatellitesData(delayUpdateData)
             } else {
                 selectedSat = satellites[satellites.size - 1]
-                renderSatelitesData(delayUpdate)
+                renderSatellitesData(delayUpdateData)
             }
         }
     }
@@ -115,27 +109,29 @@ class MapViewModel @Inject constructor(
         when {
             satellites.isNotEmpty() && idSat == null -> {
                 selectedSat = satellites.first()
-                renderSatelitesData()
+                renderSatellitesData()
             }
             satellites.isNotEmpty() && idSat != null -> {
                 selectedSat = findSelectedSatInData(idSat, satellites)
-                renderSatelitesData()
+                renderSatellitesData()
             }
             else -> _uiState.value = DataState.empty()
         }
     }
 
-    private fun renderSatelitesData(delayUpdate: Long = 500) = viewModelScope.launch {
+    private fun renderSatellitesData(delayUpdate: Long = 500) = viewModelScope.launch {
         _uiState.value = DataState.loading()
         updateJob?.cancelAndJoin()
         updateJob = launch {
             while (isActive) {
                 val date = Date()
-                val satData = getDataSat(selectedSat!!, date)
-                val satTrack = getTrackSat(selectedSat!!, date)
+                val satData =
+                    getDataSat(selectedSat!!, date) //зуб даю не null. позже обязательно поправлю
+                val satTrack =
+                    getTrackSat(selectedSat!!, date) //зуб даюне null. позже обязательно поправлю
                 val positions = getPositionsSat(satellites, date)
                 delay(delayUpdate)
-                val mapDataUiState = DataState.succes(MapUiData(
+                val mapDataUiState = DataState.success(MapUiData(
                     satellites = positions,
                     satTrack = satTrack,
                     satData = satData,
@@ -163,12 +159,9 @@ class MapViewModel @Inject constructor(
         return trackSatellite
     }
 
-    private suspend fun getPositionsSat(
-        satellites: List<Satellite>,
-        date: Date,
-    ): List<MapSatUiData> {
-        return satellites.map { satellite ->
-            satPositionUseCase.getPositionSat(satellite, Coordinates(0.0, 0.0), date.time)
+    private suspend fun getPositionsSat(sats: List<Satellite>, date: Date): List<MapSatUiData> {
+        return sats.map { sat ->
+            satPositionUseCase.getPositionSat(sat, Coordinates(0.0, 0.0), date.time)
                 .toMapSatUiData(resource)
         }
     }

@@ -1,7 +1,7 @@
 package developer.mihailzharkovskiy.sputniki_v_kosmose.app.domain.usecase.satellite_position
 
 import developer.mihailzharkovskiy.sputniki_v_kosmose.app.Coordinates
-import developer.mihailzharkovskiy.sputniki_v_kosmose.app.di.module.dispatchers.DefaultDispatcher
+import developer.mihailzharkovskiy.sputniki_v_kosmose.app.di.DefaultDispatcher
 import developer.mihailzharkovskiy.sputniki_v_kosmose.app.domain.core_calculations.predict.Satellite
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext

@@ -38,7 +38,6 @@ class MainActivity : AppCompatActivity() {
         requestPermission()
     }
 
-
     private fun requestPermission() {
         when (userlocation.checkPermission()) {
             is PermissionState.NoPermission -> checkFirstRun()
@@ -47,11 +46,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun checkFirstRun() {
-        val KEY_FIRST_LAUNCH = "KEY_FIRST_LAUNCH"
-        val SHARED_PREF = "HARED_PREF"
-        val preferences = this.getSharedPreferences(SHARED_PREF, MODE_PRIVATE)
-        if (preferences.getBoolean(KEY_FIRST_LAUNCH, true)) {
-            preferences.edit { putBoolean(KEY_FIRST_LAUNCH, false) }
+        val keyFirstLaunch = "key_first_launch"
+        val sharedPref = "shared_pref"
+        val preferences = this.getSharedPreferences(sharedPref, MODE_PRIVATE)
+        if (preferences.getBoolean(keyFirstLaunch, true)) {
+            preferences.edit { putBoolean(keyFirstLaunch, false) }
             DialogUserLocation.show(supportFragmentManager)
         }
     }

@@ -4,7 +4,6 @@ import developer.mihailzharkovskiy.sputniki_v_kosmose.app.data.sources.local_sou
 import developer.mihailzharkovskiy.sputniki_v_kosmose.app.data.sources.local_source.database.TleEntity
 import developer.mihailzharkovskiy.sputniki_v_kosmose.app.domain.core_calculations.model.SatelliteDomainModel
 
-
 fun SatelliteDomainModel.mapToSatelliteEntity(): SatelliteEntity {
     return SatelliteEntity(
         isSelected = this.isSelected,

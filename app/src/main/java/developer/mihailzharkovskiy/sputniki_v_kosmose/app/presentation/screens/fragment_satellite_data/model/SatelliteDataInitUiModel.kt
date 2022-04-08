@@ -2,7 +2,7 @@ package developer.mihailzharkovskiy.sputniki_v_kosmose.app.presentation.screens.
 
 import developer.mihailzharkovskiy.sputniki_v_kosmose.app.domain.usecase.satellite_above_the_user.SatAboveTheUserDomainModel
 
-/**нужен для обработки данных переданных во время пперехода меж экранами**/
+/**нужено для обработки данных переданных во время пперехода меж экранами**/
 data class SatelliteDataInitUiModel(
     val satName: String,
     val azimuthEnd: String,

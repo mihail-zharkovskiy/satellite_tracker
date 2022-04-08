@@ -1,4 +1,4 @@
-package developer.mihailzharkovskiy.sputniki_v_kosmose.app.di.module
+package developer.mihailzharkovskiy.sputniki_v_kosmose.app.di
 
 import android.content.Context
 import dagger.Module

@@ -5,8 +5,8 @@ import developer.mihailzharkovskiy.sputniki_v_kosmose.app.presentation.screens.f
 
 fun SatelliteDomainModel.mapToUiModel(): EntriesUiModel {
     return EntriesUiModel(
-        id = this.tle.idSatellite,
-        name = this.tle.name,
+        idSatellite = this.tle.idSatellite,
+        nameSatellite = this.tle.name,
         isSelected = this.isSelected
     )
 }

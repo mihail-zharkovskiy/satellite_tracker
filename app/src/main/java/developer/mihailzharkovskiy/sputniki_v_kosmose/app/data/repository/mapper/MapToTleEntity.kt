@@ -37,11 +37,11 @@ private fun getDayOfYear(year: Int, month: Int, dayOfMonth: Int): String {
     if (month == 1) return "0$dayOfMonth"
     val daysArray = arrayOf(31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31)
     var dayOfYear = dayOfMonth
-    // If leap year increment Feb days
+    // для случа если год високосный
     if (((year / 4 == 0) && (year / 100 != 0)) || (year / 400 == 0)) daysArray[1]++
     for (i in 0 until month - 1) {
         dayOfYear += daysArray[i]
     }
-    /**ноль этот нужен обязательно если номер дня меньше ста**/
+    // "0$dayOfYear" ноль этот нужен обязательно если номер дня меньше ста
     return if (dayOfYear < 100) "0$dayOfYear" else dayOfYear.toString()
 }

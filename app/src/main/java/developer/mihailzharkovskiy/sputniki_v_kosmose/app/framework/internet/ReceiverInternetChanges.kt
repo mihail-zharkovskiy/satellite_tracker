@@ -14,7 +14,7 @@ class ReceiverInternetChanges(private val callbackInternetChanges: InternetState
 
     override fun onReceive(context: Context, intent: Intent) {
         if (intent.action == ConnectivityManager.CONNECTIVITY_ACTION) {
-            callbackInternetChanges.emit(checkInternetConnection(context))
+            callbackInternetChanges.callbackInternetState(checkInternetConnection(context))
         }
     }
 

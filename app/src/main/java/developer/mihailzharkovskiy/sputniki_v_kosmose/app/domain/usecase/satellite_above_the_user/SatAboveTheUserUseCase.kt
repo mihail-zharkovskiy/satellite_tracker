@@ -1,7 +1,7 @@
 package developer.mihailzharkovskiy.sputniki_v_kosmose.app.domain.usecase.satellite_above_the_user
 
 import developer.mihailzharkovskiy.sputniki_v_kosmose.app.Coordinates
-import developer.mihailzharkovskiy.sputniki_v_kosmose.app.di.module.dispatchers.DefaultDispatcher
+import developer.mihailzharkovskiy.sputniki_v_kosmose.app.di.DefaultDispatcher
 import developer.mihailzharkovskiy.sputniki_v_kosmose.app.domain.SatelliteRepository
 import developer.mihailzharkovskiy.sputniki_v_kosmose.app.domain.core_calculations.predict.Satellite
 import developer.mihailzharkovskiy.sputniki_v_kosmose.app.presentation.data_state.DataState
@@ -21,8 +21,9 @@ class SatAboveTheUserUseCase @Inject constructor(
     /**на примере hoursAhead = 3 т.е пролеты спутников буду расчитывать на ближайшие три часа**/
     private val hoursAhead = 1
 
-    /**минимальная возвышение на которое спутник поднимается над горизонтом,при котормо мы добавляем его в список для отслеживания **/
-    private val minElevation: Double = 16.0
+    /**минимальная возвышение на которое спутник поднимается над горизонтом,
+     * при котормо мы добавляем его в список для отслеживания **/
+    private val minElevation: Double = 15.0
 
     private var userLocation = userLocationSource.getUserLocation()
 
@@ -83,7 +84,7 @@ class SatAboveTheUserUseCase @Inject constructor(
                         .sortedBy { it.isDeepSpace }
                         .toList()
                     if (satellites.isEmpty()) _satAboveTheUser.emit(DataState.empty())
-                    else _satAboveTheUser.emit(DataState.succes(result))
+                    else _satAboveTheUser.emit(DataState.success(result))
 
                     delay(2000)
                 }
@@ -104,7 +105,7 @@ class SatAboveTheUserUseCase @Inject constructor(
         var shouldRewind = true
         var count = 0
         if (satellite.willBeSeen(userLocation)) {
-            if (satellite.tle.isDeepspace) {
+            if (satellite.tle.isDeepSpace) {
                 passes.add(getGeoPass(satellite, userLocation, nowTime))
             } else {
                 do {
@@ -126,10 +127,12 @@ class SatAboveTheUserUseCase @Inject constructor(
         minElev: Double,
     ): List<SatAboveTheUserDomainModel> {
         val timeFuture = time + (hoursAhead * 60L * 60L * 1000L)
-        return this.filter { it.endTime > time }
+        return this.asSequence()
+            .filter { it.endTime > time }
             .filter { it.startTime < timeFuture }
             .filter { it.maxElevation > minElev }
             .sortedBy { it.startTime }
+            .toList()
     }
 
     private fun getGeoPass(

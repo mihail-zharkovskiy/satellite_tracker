@@ -14,20 +14,26 @@ fun SatAboveTheUserDomainModel.mapToSatAboveTheUserUiModel(resource: Resource): 
         name = this.name,
         progress = this.progress,
         isDeepSpace = this.isDeepSpace,
-        startTime = SimpleDateFormat(resource.getString(R.string.fps_startTime),
+        startTime = SimpleDateFormat(
+            resource.getString(R.string.fps_startTime),
             Locale.getDefault()).format(this.startTime),
-        endTime = SimpleDateFormat(resource.getString(R.string.fps_endTime),
+        endTime = SimpleDateFormat(
+            resource.getString(R.string.fps_endTime),
             Locale.getDefault()).format(this.endTime),
-        endAzimuth = String.format(resource.getString(R.string.fps_azimuth_communis),
+        endAzimuth = String.format(
+            resource.getString(R.string.fps_azimuth_communis),
             this.endAzimuth,
             this.endAzimuth.azimuthToSideWorld(resource)),
-        startAzimuth = String.format(resource.getString(R.string.fps_azimuth_communis),
+        startAzimuth = String.format(
+            resource.getString(R.string.fps_azimuth_communis),
             this.startAzimuth,
             this.startAzimuth.azimuthToSideWorld(resource)),
-        centerAzimuth = String.format(resource.getString(R.string.fps_azimuth_communis),
+        centerAzimuth = String.format(
+            resource.getString(R.string.fps_azimuth_communis),
             this.centerAzimuth,
             this.centerAzimuth.azimuthToSideWorld(resource)),
-        maxElevation = String.format(resource.getString(R.string.fps_maxElevation),
+        maxElevation = String.format(
+            resource.getString(R.string.fps_maxElevation),
             this.maxElevation),
         satAboveTheUserDomainModel = this
     )

@@ -10,14 +10,16 @@ class EntriesAdapterHeader : RecyclerView.Adapter<EntriesAdapterHeader.HeaderVie
 
     var sum: Int = 0
         set(value) {
-            field = value
-            this.notifyItemChanged(0)
+            if (field != value) {
+                field = value
+                notifyItemChanged(0)
+            }
         }
-
 
     inner class HeaderViewHolder(val binding: ItemEntryHeaderBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        private val stringSumSatellites = binding.root.context.getString(R.string.ef_heder_fragment)
+
+        private val stringSumSatellites = itemView.context.getString(R.string.ef_heder_fragment)
 
         fun bindMy() {
             binding.zagolovok.text = String.format(stringSumSatellites, sum.toString())

@@ -35,7 +35,7 @@ class UserLocationSourceImpl @Inject constructor(
     override fun getUserLocation(): Coordinates {
         return if (checkPermission() == PermissionState.YesPermission) {
             val data = locManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
-            if (data != null) Coordinates(longitude = data.longitude, latitude = data.latitude)
+            if (data != null) Coordinates(data.latitude, data.longitude)
             else userLocationDefault
         } else userLocationDefault
     }
@@ -77,7 +77,7 @@ class UserLocationSourceImpl @Inject constructor(
          * этот результат кэшируется системой, после чего происходит отписка от прослушивания координат
          * locManager.removeUpdates(this). После всегда можно достать эти координаты черз
          * locManager.getLastKnownLocation.
-         * варианты чтобы не возиться с flow или shared pref.
+         * вариант чтобы не возиться с flow или shared pref.
          * **/
     }
 }

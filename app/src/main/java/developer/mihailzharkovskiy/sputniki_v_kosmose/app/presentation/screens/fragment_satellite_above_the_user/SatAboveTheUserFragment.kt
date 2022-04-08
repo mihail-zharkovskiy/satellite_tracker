@@ -55,18 +55,18 @@ class SatAboveTheUserFragment : BaseFragment<FragmentSatAboveTheUserBinding>(),
 
     override fun onResume() {
         super.onResume()
-        viewModel.trigerEvent(SatAboveTheUserEvent.OnResume)
+        viewModel.handleEvent(SatAboveTheUserEvent.OnResume)
         binding.refreshLayout.setOnRefreshListener(swipeRefreshListener)
     }
 
     override fun onPause() {
         super.onPause()
-        viewModel.trigerEvent(SatAboveTheUserEvent.OnPause)
+        viewModel.handleEvent(SatAboveTheUserEvent.OnPause)
         binding.refreshLayout.setOnRefreshListener(null)
     }
 
     private val swipeRefreshListener = SwipeRefreshLayout.OnRefreshListener {
-        viewModel.trigerEvent(SatAboveTheUserEvent.RefreshData)
+        viewModel.handleEvent(SatAboveTheUserEvent.RefreshData)
         binding.refreshLayout.isRefreshing = false
     }
 
@@ -107,13 +107,11 @@ class SatAboveTheUserFragment : BaseFragment<FragmentSatAboveTheUserBinding>(),
             Status.SUCCESS -> {
                 binding.tvAlarm.visibility = View.GONE
                 binding.progressBarRefresh.visibility = View.GONE
-                binding.passesRecycler.visibility = View.VISIBLE
                 binding.refreshLayout.isEnabled = true
                 if (state.data != null) mainAdapter.submitList(state.data)
             }
             Status.LOADING -> {
                 binding.tvAlarm.visibility = View.GONE
-                binding.passesRecycler.visibility = View.VISIBLE
                 binding.progressBarRefresh.visibility = View.VISIBLE
                 binding.refreshLayout.isEnabled = false
             }
@@ -121,14 +119,13 @@ class SatAboveTheUserFragment : BaseFragment<FragmentSatAboveTheUserBinding>(),
                 binding.tvAlarm.visibility = View.VISIBLE
                 binding.tvAlarm.text = resources.getString(R.string.fps_now_no_prolet_sat)
                 binding.progressBarRefresh.visibility = View.GONE
-                binding.passesRecycler.visibility = View.INVISIBLE
                 binding.refreshLayout.isEnabled = false
+                mainAdapter.submitList(emptyList())
             }
             Status.ERROR -> {
                 binding.tvAlarm.visibility = View.VISIBLE
                 binding.tvAlarm.text = resources.getString(R.string.fps_calculate_error)
                 binding.progressBarRefresh.visibility = View.GONE
-                binding.passesRecycler.visibility = View.INVISIBLE
                 binding.refreshLayout.isEnabled = false
             }
         }

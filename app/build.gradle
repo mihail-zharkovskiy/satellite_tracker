@@ -22,7 +22,6 @@ android {
 
     buildTypes {
         release {
-//            buildConfigField "String", "ApiKey", props.getProperty("apiKey")
             minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'

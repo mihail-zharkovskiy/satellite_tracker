@@ -3,5 +3,5 @@ package developer.mihailzharkovskiy.sputniki_v_kosmose.app.presentation.framewor
 import developer.mihailzharkovskiy.sputniki_v_kosmose.app.framework.internet.InternetState
 
 interface InternetStateChanges {
-    fun emit(internetState: InternetState)
+    fun callbackInternetState(internetState: InternetState)
 }

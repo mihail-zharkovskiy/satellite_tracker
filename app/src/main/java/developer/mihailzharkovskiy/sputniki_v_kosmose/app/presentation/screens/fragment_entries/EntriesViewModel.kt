@@ -33,7 +33,7 @@ class EntriesViewModel @Inject constructor(
     TabLayout.OnTabSelectedListener {
 
     private var shouldSelectAll = true
-    private var jobObsereSelectedSat: Job? = null
+    private var jobObserveSelectedSat: Job? = null
     private var satellites = listOf<EntriesUiModel>()
 
 
@@ -54,43 +54,41 @@ class EntriesViewModel @Inject constructor(
     }
 
     private suspend fun getAllSat() {
-        jobObsereSelectedSat?.cancelAndJoin()
-        jobObsereSelectedSat = viewModelScope.launch {
+        jobObserveSelectedSat?.cancelAndJoin()
+        jobObserveSelectedSat = viewModelScope.launch {
             repository.getAllSatellites().collect { list ->
                 satellites = list.map { it.mapToUiModel() }
                 if (satellites.isNotEmpty()) {
-                    _uiState.value = EntriesUiState.SectionAllSat(DataState.succes(satellites))
+                    _uiState.value = EntriesUiState.SectionAllSat(DataState.success(satellites))
                 } else _uiState.value = EntriesUiState.SectionAllSat(DataState.empty())
             }
         }
     }
 
     private suspend fun getFavoriteSat() {
-        jobObsereSelectedSat?.cancelAndJoin()
-        jobObsereSelectedSat = viewModelScope.launch {
+        jobObserveSelectedSat?.cancelAndJoin()
+        jobObserveSelectedSat = viewModelScope.launch {
             repository.getSelectedSatellites().collect { list ->
                 val data = list.map { it.mapToUiModel() }
-                _uiState.value = EntriesUiState.SectionFavoriteSat(DataState.succes(data))
+                _uiState.value = EntriesUiState.SectionFavoriteSat(DataState.success(data))
             }
         }
     }
 
     fun selectAllSatellites() {
         viewModelScope.launch {
-            satellites.forEach { repository.updateSelection(it.id, shouldSelectAll) }
+            satellites.forEach { repository.updateSelection(it.idSatellite, shouldSelectAll) }
             shouldSelectAll = shouldSelectAll.not()
         }
     }
 
-    /**CALLBACK РЕСИВЕРА НА ИНТЕРНЕТ**/
-    override fun emit(internetState: InternetState) {
+    override fun callbackInternetState(internetState: InternetState) {
         when (internetState) {
             InternetState.On -> _uiState.value = EntriesUiState.Internet(InternetState.On)
             InternetState.Off -> _uiState.value = EntriesUiState.Internet(InternetState.Off)
         }
     }
 
-    /**CALLBACK нажатие на Item**/
     override fun clickOnItemAdapter(idSatellites: Int, isSelected: Boolean) {
         viewModelScope.launch { repository.updateSelection(idSatellites, isSelected) }
     }
@@ -98,14 +96,15 @@ class EntriesViewModel @Inject constructor(
     /**МЕТОДЫ СЛУШАТЕЛЯ ИЗМЕНЕНИЙ В EDIT TEXT**/
     override fun onTextChanged(text: CharSequence, start: Int, before: Int, count: Int) {
         viewModelScope.launch {
-            jobObsereSelectedSat?.cancelAndJoin()
+            jobObserveSelectedSat?.cancelAndJoin()
             if (text.isEmpty()) {
                 getAllSat()
             } else {
                 val searchResult = satellites.filter { satellite ->
-                    satellite.name.startsWith(text, true) || satellite.name.contains(text, true)
+                    satellite.nameSatellite.startsWith(text,
+                        true) || satellite.nameSatellite.contains(text, true)
                 }
-                _uiState.value = EntriesUiState.SectionAllSat(DataState.succes(searchResult))
+                _uiState.value = EntriesUiState.SectionAllSat(DataState.success(searchResult))
             }
         }
     }

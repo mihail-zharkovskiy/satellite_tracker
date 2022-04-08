@@ -40,7 +40,8 @@ class CompassImpl @Inject constructor(
         azimuthListener?.onOrientationChanged(
             CompassEvent.Data(
                 azimuth = azimuth,
-                azimuthString = String.format(formatAzimuth,
+                azimuthString = String.format(
+                    formatAzimuth,
                     azimuth,
                     azimuth.azimuthToSideWorld(resource))
             )

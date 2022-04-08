@@ -16,7 +16,7 @@ class EntriesAdapter(private val clickListener: EntriesClickListener) :
             oldDomainModel: EntriesUiModel,
             newDomainModel: EntriesUiModel,
         ): Boolean {
-            return oldDomainModel.id == newDomainModel.id
+            return oldDomainModel.idSatellite == newDomainModel.idSatellite
         }
 
         override fun areContentsTheSame(
@@ -27,17 +27,16 @@ class EntriesAdapter(private val clickListener: EntriesClickListener) :
         }
 
         override fun getChangePayload(oldItem: EntriesUiModel, newItem: EntriesUiModel): Boolean? {
-            return if (oldItem.id == newItem.id) newItem.isSelected
+            return if (oldItem.idSatellite == newItem.idSatellite) newItem.isSelected
             else null
         }
-
     }
+
     private val differ = AsyncListDiffer(this, diffCallback)
 
     fun submitList(domainModels: List<EntriesUiModel>) {
         differ.submitList(domainModels)
     }
-
 
     override fun getItemCount(): Int = differ.currentList.size
 
@@ -67,15 +66,15 @@ class EntriesAdapter(private val clickListener: EntriesClickListener) :
         ) {
             binding.entryCheckbox.isChecked = isSelected
             itemView.setOnClickListener {
-                listener.clickOnItemAdapter(model.id, model.isSelected.not())
+                listener.clickOnItemAdapter(model.idSatellite, model.isSelected.not())
             }
         }
 
         fun update(model: EntriesUiModel, listener: EntriesClickListener) {
-            binding.entryCheckbox.text = model.name
+            binding.entryCheckbox.text = model.nameSatellite
             binding.entryCheckbox.isChecked = model.isSelected
             itemView.setOnClickListener {
-                listener.clickOnItemAdapter(model.id, model.isSelected.not())
+                listener.clickOnItemAdapter(model.idSatellite, model.isSelected.not())
             }
         }
 

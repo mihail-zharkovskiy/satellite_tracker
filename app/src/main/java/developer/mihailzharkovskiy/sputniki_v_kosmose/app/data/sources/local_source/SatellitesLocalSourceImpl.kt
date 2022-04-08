@@ -3,7 +3,7 @@ package developer.mihailzharkovskiy.sputniki_v_kosmose.app.data.sources.local_so
 import developer.mihailzharkovskiy.sputniki_v_kosmose.app.data.repository.SatellitesLocalSourse
 import developer.mihailzharkovskiy.sputniki_v_kosmose.app.data.sources.local_source.database.SatelliteDao
 import developer.mihailzharkovskiy.sputniki_v_kosmose.app.data.sources.local_source.database.SatelliteEntity
-import developer.mihailzharkovskiy.sputniki_v_kosmose.app.di.module.dispatchers.IoDispatcher
+import developer.mihailzharkovskiy.sputniki_v_kosmose.app.di.IoDispatcher
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -14,8 +14,7 @@ class SatellitesLocalSourceImpl @Inject constructor(
     private val ioDispatcher: CoroutineDispatcher,
 ) : SatellitesLocalSourse {
 
-    //на самом деле можно не указывать диспатчер, тк Room сам переключает если нужно на IO,
-    //но для красоты всеже указал withContext(Dispatchers.IO)
+    //withContext(Dispatchers.IO) сделал только для красоты. Room может и сам переключить потоки
 
     override suspend fun getSelectedSatellites() = withContext(ioDispatcher) {
         entriesDao.getSelectedSatellites()

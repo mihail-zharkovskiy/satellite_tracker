@@ -21,15 +21,15 @@ class InternetDialog : BaseDialogFragment<DialogInternetBinding>() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.tvOnInternet.setOnClickListener { perehodVnastroykiInterneta() }
+        binding.tvOnInternet.setOnClickListener { goToSettingsInternet() }
     }
 
-    private fun perehodVnastroykiInterneta() {
+    private fun goToSettingsInternet() {
         startActivity(Intent(Intent(Settings.ACTION_SETTINGS)))
     }
 
     companion object {
-        const val TAG = "InternetDialog"
+        private const val TAG = "InternetDialog"
         fun show(fragmentManager: FragmentManager) {
             InternetDialog().show(fragmentManager, TAG)
         }

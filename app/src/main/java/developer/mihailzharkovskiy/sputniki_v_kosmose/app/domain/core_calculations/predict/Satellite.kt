@@ -10,60 +10,43 @@ import kotlin.math.*
 
 @Parcelize
 open class Satellite(val tle: TleDomainModel) : Parcelable {
+
     @IgnoredOnParcel
     private val flatFactor = 3.35281066474748E-3
-
     @IgnoredOnParcel
     private val deg2Rad = 1.745329251994330E-2
-
     @IgnoredOnParcel
     private val secPerDay = 8.6400E4
-
     @IgnoredOnParcel
     private val minPerDay = 1.44E3
-
     @IgnoredOnParcel
     private val epsilon = 1.0E-12
-
     @IgnoredOnParcel
     private val position = Vector4()
-
     @IgnoredOnParcel
     private val velocity = Vector4()
-
     @IgnoredOnParcel
     private var gsPosTheta = 0.0
-
     @IgnoredOnParcel
     private var perigee = 0.0
-
     @IgnoredOnParcel
     val orbitalPeriod = 24 * 60 / tle.meanmo
-
     @IgnoredOnParcel
     val earthRadius = 6378.137
-
     @IgnoredOnParcel
     val j3Harmonic = -2.53881E-6
-
     @IgnoredOnParcel
     val twoPi = Math.PI * 2.0
-
     @IgnoredOnParcel
     val twoThirds = 2.0 / 3.0
-
     @IgnoredOnParcel
     val xke = 7.43669161E-2
-
     @IgnoredOnParcel
     val ck2 = 5.413079E-4
-
     @IgnoredOnParcel
     val ck4 = 6.209887E-7
-
     @IgnoredOnParcel
     var qoms24 = 0.0
-
     @IgnoredOnParcel
     var s4 = 0.0
 
@@ -123,7 +106,7 @@ open class Satellite(val tle: TleDomainModel) : Parcelable {
     }
 
     private fun calculateSDP4orSGP4(tsince: Double) {
-        if (tle.isDeepspace) (this as SatelliteInGeostationaryOrbit).calculateSDP4(tsince)
+        if (tle.isDeepSpace) (this as SatelliteInGeostationaryOrbit).calculateSDP4(tsince)
         else (this as SatelliteInEarthOrbit).calculateSGP4(tsince)
     }
 

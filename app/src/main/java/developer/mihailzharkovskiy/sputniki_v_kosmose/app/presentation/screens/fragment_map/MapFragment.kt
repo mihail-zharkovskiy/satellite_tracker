@@ -58,8 +58,8 @@ class MapFragment : BaseFragment<FragmentMapBinding>(), MapViewWrapper.ClickOnMa
 
         with(binding) {
             btUpdateLocation.setOnClickListener { viewModel.updateUserLocation() }
-            mapBtnBack.setOnClickListener { viewModel.pereklchitsyaNaSptnikNazad() }
-            mapBtnNext.setOnClickListener { viewModel.pereklchitsyaNaSptnikVpered() }
+            mapBtnBack.setOnClickListener { viewModel.switchToSatelliteBack() }
+            mapBtnNext.setOnClickListener { viewModel.switchToSatelliteNext() }
             mapDataName.setOnClickListener { getInformFromBrowser() }
         }
     }

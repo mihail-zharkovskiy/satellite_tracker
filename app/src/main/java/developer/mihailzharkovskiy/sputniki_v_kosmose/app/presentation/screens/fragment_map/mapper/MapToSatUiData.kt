@@ -11,17 +11,17 @@ fun SatellitePositionDomainModel.toMapSatUiData(resource: Resource): MapSatUiDat
     return MapSatUiData(
         idSatellite = this.idSatellite,
         name = this.name,
+        latitude = convertLatitudeForMap(Math.toDegrees(this.latitude)),
+        longitude = convertLongitudeForMap(Math.toDegrees(this.longitude)),
         range = String.format(resource.getString(R.string.fm_range), this.range),
         altitude = String.format(resource.getString(R.string.fm_altitude), this.altitude),
         velocity = String.format(resource.getString(R.string.fm_speed), this.getOrbitalVelocity()),
-        latitudeString = String.format(resource.getString(R.string.fm_latitude),
+        latitudeString = String.format(
+            resource.getString(R.string.fm_latitude),
             Math.toDegrees(this.latitude)),
-        longitudeString = String.format(resource.getString(R.string.fm_longitude),
-            Math.toDegrees(this.longitude)),
-
-        /**НУЖНА ЛИ КОНВЕРТАЦИЯ?**/
-        latitude = convertLatitudeForMap(Math.toDegrees(this.latitude)),
-        longitude = convertLongitudeForMap(Math.toDegrees(this.longitude))
+        longitudeString = String.format(
+            resource.getString(R.string.fm_longitude),
+            Math.toDegrees(this.longitude))
     )
 }
 

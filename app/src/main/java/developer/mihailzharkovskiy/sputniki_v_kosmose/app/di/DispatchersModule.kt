@@ -1,4 +1,4 @@
-package developer.mihailzharkovskiy.sputniki_v_kosmose.app.di.module.dispatchers
+package developer.mihailzharkovskiy.sputniki_v_kosmose.app.di
 
 import dagger.Module
 import dagger.Provides

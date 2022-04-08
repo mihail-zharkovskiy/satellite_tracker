@@ -12,10 +12,6 @@ import developer.mihailzharkovskiy.sputniki_v_kosmose.databinding.DialogUserLoca
 
 class DialogUserLocation : BaseDialogFragment<DialogUserLocationBinding>() {
 
-    //    private val permFineLoc = Manifest.permission.ACCESS_FINE_LOCATION
-    private val permCoarseLoc = Manifest.permission.ACCESS_COARSE_LOCATION
-    private val REQUEST_LOCATION_PERMISSON = 1
-
     override fun initBinding(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -25,17 +21,21 @@ class DialogUserLocation : BaseDialogFragment<DialogUserLocationBinding>() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         binding.tvOnPermissionLocation.setOnClickListener {
             ActivityCompat.requestPermissions(
                 requireActivity(),
-                arrayOf(/*permFineLoc,*/ permCoarseLoc), REQUEST_LOCATION_PERMISSON
+                arrayOf(permCoarseLoc), REQUEST_LOCATION_PERMISSION
             )
             dialog?.cancel()
         }
     }
 
     companion object {
-        const val TAG_DUL = "TAG_DUL"
+        private const val permCoarseLoc = Manifest.permission.ACCESS_COARSE_LOCATION
+        private const val REQUEST_LOCATION_PERMISSION = 1
+        private const val TAG_DUL = "TAG_DUL"
+
         fun show(supportFragmentManager: FragmentManager) {
             DialogUserLocation().show(supportFragmentManager, TAG_DUL)
         }

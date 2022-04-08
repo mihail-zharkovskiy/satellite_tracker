@@ -3,7 +3,7 @@ package developer.mihailzharkovskiy.sputniki_v_kosmose.app.presentation.screens.
 import kotlin.math.max
 import kotlin.math.min
 
-/**ЭТИ ФУНКЦИИ НУЖНЫ.НУЖНО ДУМАТЬ КУДА ИХ ПРИБРАТЬ**/
+//ЭТИ ФУНКЦИИ НУЖНЫ!!! НУЖНО ДУМАТЬ КУДА ИХ ПРИБРАТЬ
 
 fun convertLatitudeForMap(latitude: Double): Double {
     return convertCoordinate(latitude, -85.05, 85.05)

@@ -11,8 +11,10 @@ class SatAboveTheUserAdapterTutorial :
 
     var visibility = true
         set(value) {
-            field = value
-            notifyItemChanged(0)
+            if (field != value) {
+                field = value
+                notifyItemChanged(0)
+            }
         }
 
     inner class ViewHolderTutorial(val binding: ItemSatAboveTheUserTutorialBinding) :

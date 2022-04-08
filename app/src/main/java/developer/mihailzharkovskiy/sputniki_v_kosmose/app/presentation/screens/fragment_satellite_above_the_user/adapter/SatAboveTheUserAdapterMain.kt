@@ -12,7 +12,11 @@ import developer.mihailzharkovskiy.sputniki_v_kosmose.databinding.ItemSatAboveTh
 
 class SatAboveTheUserAdapterMain(
     private val clickListener: ClickItemListener,
-) : RecyclerView.Adapter<SatAboveTheUserAdapterMain.SatPassLeoHolder>() {
+) : RecyclerView.Adapter<SatAboveTheUserAdapterMain.SatAboveTheUserHolder>() {
+
+    interface ClickItemListener {
+        fun onClick(satellite: SatAboveTheUserDomainModel)
+    }
 
     fun submitList(passes: List<SatAboveTheUserUiModel>) {
         differ.submitList(passes)
@@ -45,28 +49,33 @@ class SatAboveTheUserAdapterMain(
 
     private val differ = AsyncListDiffer(this, diffCallback)
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SatPassLeoHolder {
-        return SatPassLeoHolder.from(parent)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SatAboveTheUserHolder {
+        return SatAboveTheUserHolder.from(parent)
     }
 
-    override fun onBindViewHolder(holder: SatPassLeoHolder, position: Int) {
-        holder.update(differ.currentList[position], clickListener)
+    override fun onBindViewHolder(holder: SatAboveTheUserHolder, position: Int) {
+        holder.updateItem(differ.currentList[position], clickListener)
     }
 
-    override fun onBindViewHolder(holder: SatPassLeoHolder, position: Int, payloads: List<Any?>) {
+    override fun onBindViewHolder(
+        holder: SatAboveTheUserHolder,
+        position: Int,
+        payloads: List<Any?>,
+    ) {
         if (payloads.isEmpty() || payloads[0] == null) {
-            holder.update(differ.currentList[position], clickListener)
+            holder.updateItem(differ.currentList[position], clickListener)
         } else holder.updatePayloads(payloads[0] as Int)
     }
 
-    class SatPassLeoHolder private constructor(private val binding: ItemSatAboveTheUserMainBinding) :
+
+    class SatAboveTheUserHolder private constructor(private val binding: ItemSatAboveTheUserMainBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun updatePayloads(progrss: Int) {
-            binding.progress.progress = progrss
+        fun updatePayloads(progress: Int) {
+            binding.progress.progress = progress
         }
 
-        fun update(
+        fun updateItem(
             data: SatAboveTheUserUiModel,
             clickListener: ClickItemListener,
         ) {
@@ -90,9 +99,9 @@ class SatAboveTheUserAdapterMain(
         }
 
         companion object {
-            fun from(parent: ViewGroup): SatPassLeoHolder {
+            fun from(parent: ViewGroup): SatAboveTheUserHolder {
                 val inflater = LayoutInflater.from(parent.context)
-                return SatPassLeoHolder(ItemSatAboveTheUserMainBinding.inflate(inflater,
+                return SatAboveTheUserHolder(ItemSatAboveTheUserMainBinding.inflate(inflater,
                     parent,
                     false))
             }
@@ -104,9 +113,5 @@ class SatAboveTheUserAdapterMain(
     override fun getItemViewType(position: Int): Int {
         return if (differ.currentList[position].isDeepSpace) 1
         else 0
-    }
-
-    interface ClickItemListener {
-        fun onClick(satellite: SatAboveTheUserDomainModel)
     }
 }
