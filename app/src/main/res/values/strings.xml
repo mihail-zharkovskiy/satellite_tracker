@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name" translatable="false">Спутники</string>
+    <string name="time_shablon" translatable="false">HH:mm:ss</string>
+
+    //COMPASS SIDE OF THE WORLD
+    <string name="n">С</string>
+    <string name="ne">СВ</string>
+    <string name="e">В</string>
+    <string name="se">ЮВ</string>
+    <string name="s">Ю</string>
+    <string name="sw">ЮЗ</string>
+    <string name="w">З</string>
+    <string name="nw">СЗ</string>
+    <string name="compass_no_sensor">на устройстве нет датчика \"компас\"</string>
+
+    //sba - snack bar alarm
+    <string name="sba_ok">OK</string>
+
+    //ul - user location
+    <string name="ul_snack_bar_no_access_to_location">Нет разрешения для работы с местоположением</string>
+    <string name="ul_snack_bar_no_access_to_location_for_all_apps">Доступ к местоположению мог быть отключен для всех приложений</string>
+    <string name="ul_snack_bar_on_gps">включите gps</string>
+
+
+    //ipl - item pass leo
+    <string name="ipl_start">начало</string>
+    <string name="ipl_end">конец</string>
+
+    //ipt - item pass turorial
+    <string name="ipt_orbita_okolozemn">спутник на околоземной орбите</string>
+    <string name="ipt_orbita_geostacionar">спутник на геостационарной орбите</string>
+    <string name="ipt_max_elev">max.elev. - максимальное возвышение спутника над горизонтом</string>
+
+
+    //iph - item pass header
+    <string name="iph_no_permistion">Нет разрешения для получения данных о вашей локации.Приложение будет рассчитывать видимость спутников относительно дефолтных кординат</string>
+    <string name="iph_button_permistion">предоставить разрешение</string>
+
+    // fe - fragment entries
+    <string name="fe_tab_item_all">все</string>
+    <string name="fe_tab_item_favorites">избранные</string>
+    <string name="fe_edit_text_hint">введите название спутника</string>
+    <string name="fe_no_data">НЕТ ДАННЫХ.\n\nвключите интернет и нажмите кнопку "обновить"</string>
+    <string name="fe_toast">данное действие недоступно \n в разделе \"избранные\" </string>
+
+    // fps - fragment prolet sptnika
+    <string name="fps_now_no_prolet_sat">в ближайшее время в зоне вашей видимости спутники пролетать не будут</string>
+    <string name="fps_calculate_error">возникла ошибка при расчете местоположения спутников</string>
+    <string name="fps_azimuth_communis">%.1f°(%2$s)</string>
+    <string name="fps_maxElevation">max.elev. %.1f°</string>
+    <string name="fps_startTime" translatable="false">HH:mm:ss</string>
+    <string name="fps_endTime" translatable="false">HH:mm:ss</string>
+    <string name="fps_compas">азимут:%1$d°(%2$s)</string>
+
+    // fm - fragment map
+    <string name="fm_tab_item_icon">иконка</string>
+    <string name="fm_tab_item_name">название</string>
+    <string name="fm_latitude">широта: %.1f°</string>
+    <string name="fm_longitude">долгота: %.1f°</string>
+    <string name="fm_altitude">высота %.0f km</string>
+    <string name="fm_range">удаление: %.0f km</string>
+    <string name="fm_speed">скорость: %.2f km/s</string>
+    <string name="fm_latitude_default">широта: 0.0°</string>
+    <string name="fm_longitude_default">долгота: 0.0°</string>
+    <string name="fm_altitude_default">высота 0.0 km</string>
+    <string name="fm_range_default">удаление: 0.0 km</string>
+    <string name="fm_speed_default">скорость: 0.0 km/s</string>
+    <string name="fm_no_date">НЕТ ДАННЫХ.\n\nперейдите в раздел "спутники" и добавьте хотя бы один спутник в избранные</string>
+
+    //ef- data fragment
+    <string name="ef_heder_fragment">всего спутников:%s</string>
+
+    //dul - dialog user location
+    <string name="dul_obyasnenie">чтобы приложение могло рассчитывать какие спутники видны в вашей локации</string>
+    <string name="dul_shapka">НУЖЕН ДОСТУП К ГЕОЛОКАЦИИ</string>
+    <string name="dul_razreshit">разрешить</string>
+
+    //dsf-danie sputnika fragment
+    <string name="dsf_start_azimt">start:%.0f°(%s)</string>
+    //start:247°(ЮЗ)
+    <string name="dsf_end_azimt">end:%.0f°(%s)</string>
+    <string name="dsf_azimut_compas">азимут: %s°</string>
+    <string name="dsf_azimut_curent">%1$.1f°(%2$s)</string>
+    <string name="dsf_azimuth_prosto">азимут</string>
+    <string name="dsf_azimut_tekushiy">текущий азимут:</string>
+    <string name="dsf_km_s" translatable="false">%.2f km/s</string>
+    <string name="dsf_km" translatable="false">%.0f km</string>
+    <string name="dsf_elevation">возвышение:</string>
+    <string name="dsf_elevation_degree">%.1f°</string>
+    <string name="dsf_speed">скорость:</string>
+    <string name="dsf_range">удаление:</string>
+    <string name="dsf_altitude">высота орбиты:</string>
+    <string name="dsf_button_na_karte">на карте</string>
+    <string name="dsf_button_na_o_sputnike">о спутнике</string>
+    <string name="dsf_satellite_invisible">спутник за горизонтом</string>
+    <string name="dsf_uri_search_sputnik">https://www.google.com/search?q=спутник %1$s </string>
+
+    //di - dialog otsutstvuet internet
+    <string name="di_otsutstvuet_interner">ОТСУТСВУЕТ ИНТЕРНЕТ</string>
+    <string name="di_obyasnenie">невозможно обновить информацию о спутниках,приложение продолжит работу основываясь на полученных ранее данных</string>
+    <string name="di_on_internet">включить интернет</string>
+
+    //bt - botton navigation
+    <string name="bt_entries">спутники</string>
+    <string name="bt_passes">наблюдение</string>
+    <string name="bt_map">карта</string>
+
+</resources>

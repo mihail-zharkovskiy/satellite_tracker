@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="50dp">
+
+    <TextView
+        android:id="@+id/zagolovok"
+        style="@style/text_zagolovok_big_na_temnom_fone"
+        android:textColor="@color/white"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:paddingHorizontal="16dp"
+        android:background="@drawable/background_dark_radius"
+        android:textStyle="bold"
+        tools:text="всего спутников:5371" />
+
+</FrameLayout>

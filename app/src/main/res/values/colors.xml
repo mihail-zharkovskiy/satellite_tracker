@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="greyLight">#1D3245</color>
+
+    <color name="mtrl_textinput_default_box_stroke_color">@color/greyLight</color>
+
+    <color name="red">#FF6D6D</color>
+    <color name="red_okruzhnost_sptnika_in_custom_view">#80F69797</color>
+
+    <color name="red_dark">#FF0000</color>
+    <color name="blue_dark">#0078FF</color>
+    <color name="ic_cputnik_vokrug_color">#B3FD5446</color>
+    <color name="yallow">#FFCA28</color>
+    <color name="green">#68C657</color>
+    <color name="prozrachniy">#00000000</color>
+    <color name="black">#000000</color>
+
+    <color name="white">#FFFFFF</color>
+    <color name="black_5">#801D3245</color>
+    <color name="black_20">#33000000</color>
+    <color name="black_80">#CC000000</color>
+
+    <color name="heavy_clouds">#1D3245</color>
+    <color name="heavy_clouds_50">#801D3245</color>
+
+    //точно используется
+    <color name="heavy_clouds_80">#CC1D3245</color>
+
+
+    <color name="heavy_clouds_70">#B31D3245</color>
+
+    <color name="snow">#DAE5ED</color>
+
+</resources>

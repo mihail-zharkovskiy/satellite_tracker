@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/nav_entries"
+        android:icon="@drawable/ic_select_all"
+        android:title="@string/bt_entries" />
+    <item
+        android:id="@+id/nav_passes"
+        android:icon="@drawable/icon_satellite_root"
+        android:title="@string/bt_passes" />
+    <item
+        android:id="@+id/nav_map"
+        android:icon="@drawable/ic_nav_map"
+        android:title="@string/bt_map" />
+</menu>

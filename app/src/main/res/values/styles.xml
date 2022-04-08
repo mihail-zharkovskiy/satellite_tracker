@@ -1,0 +1,95 @@
+<resources>
+
+
+    <style name="round_progres_bar_on_dark_background">
+        <item name="colorAccent">@color/white</item>
+    </style>
+
+    // СТИЛИ СВЯЗАННЫЕ С ТЕКСТОМ
+
+    <style name="tv_alarm">
+        <item name="android:fontFamily">sans-serif-condensed-light</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">@dimen/text_size_osnovnie_danie</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:background">@drawable/background_alarm</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:padding">16dp</item>
+    </style>
+
+    <style name="text_tablayout">
+        <item name="android:fontFamily">sans-serif-condensed-light</item>
+        <item name="android:textColor">@color/heavy_clouds</item>
+        <item name="android:textSize">@dimen/text_size_osnovnie_danie</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textAllCaps">false</item>
+    </style>
+
+    <style name="text_osnovnie_danie_na_svetlom_fone">
+        <item name="android:fontFamily">sans-serif-condensed-light</item>
+        <item name="android:textColor">@color/heavy_clouds</item>
+        <item name="android:textSize">@dimen/text_size_osnovnie_danie</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="text_osnovnie_danie_na_temnom_fone">
+        <item name="android:fontFamily">sans-serif-condensed-light</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">@dimen/text_size_osnovnie_danie</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="text_zagolovok_big_na_temnom_fone">
+        <item name="android:fontFamily">sans-serif-condensed-light</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">@dimen/text_size_zagolovki_big</item>
+    </style>
+
+    <style name="text_zagolovok_big_na_svetlom_fone">
+        <item name="android:fontFamily">sans-serif-condensed-light</item>
+        <item name="android:textColor">@color/heavy_clouds</item>
+        <item name="android:textSize">@dimen/text_size_zagolovki_big</item>
+    </style>
+
+    <style name="MapInfoText">
+        <item name="android:textSize">15sp</item>
+        <item name="android:textColor">@color/heavy_clouds</item>
+    </style>
+
+    //СТИЛИ АНИМАЦИЙ
+
+    <style name="MyAnimationDop" parent="MyAnimation">
+        <item name="android:windowAnimationStyle">@style/MyAnimation</item>
+    </style>
+
+    <style name="MyAnimation">
+        <item name="android:windowEnterAnimation">@anim/anim_slide_in_left</item>
+        <item name="android:windowExitAnimation">@anim/anim_slide_in_right</item>
+    </style>
+
+
+    //СТИЛИ СВЯЗАННЫЕ С КНОПКАМИ
+
+    <style name="tab_layout" parent="Widget.MaterialComponents.TabLayout">
+        <item name="tabIndicator">@drawable/background_dark_radius</item>
+        <item name="tabIndicatorAnimationDuration">500</item>
+        <item name="tabIndicatorAnimationMode">elastic</item>
+        <item name="tabIndicatorColor">@null</item>
+        <item name="tabIndicatorGravity">stretch</item>
+        <item name="tabSelectedTextColor">@color/white</item>
+        <item name="tabTextAppearance">@style/text_tablayout</item>
+        <item name="tabTextColor">@color/heavy_clouds</item>
+        <item name="tabUnboundedRipple">true</item>
+    </style>
+
+    <style name="button_s_ramkoy">
+        <item name="android:fontFamily">sans-serif-condensed-light</item>
+        <item name="android:textColor">@color/heavy_clouds</item>
+        <item name="android:textSize">@dimen/text_size_osnovnie_danie</item>
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Small</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textAllCaps">false</item>strokeColor
+    </style>
+
+</resources>

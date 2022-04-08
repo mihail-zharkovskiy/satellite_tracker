@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/entries_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginTop="@dimen/layout_marging_vertical"
+        android:layout_marginHorizontal="@dimen/layout_margin_horiontal"
+        app:cardCornerRadius="@dimen/corner_radius"
+        app:cardElevation="@dimen/elevation">
+
+        <developer.mihailzharkovskiy.sputniki_v_kosmose.app.presentation.common.customView.ViewStarrySky
+            android:id="@+id/view_starry_sky"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/entries_recycler"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingHorizontal="5dp"
+            tools:listitem="@layout/item_entry" />
+
+
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            android:layout_width="76dp"
+            android:layout_height="76dp"
+            android:layout_gravity="center"
+            android:theme="@style/round_progres_bar_on_dark_background"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/tv_alarm"
+            style="@style/tv_alarm"
+            android:layout_width="@dimen/tv_alarm_width"
+            android:layout_height="wrap_content"
+            android:text="@string/fe_no_data"
+            android:visibility="gone" />
+
+    </androidx.cardview.widget.CardView>
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tabLayout"
+        style="@style/tab_layout"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/tab_item_height"
+        android:layout_marginTop="@dimen/layout_marging_vertical"
+        android:layout_marginHorizontal="@dimen/layout_margin_horiontal"
+        android:background="@drawable/background_with_radius_and_obvodka"
+        android:elevation="@dimen/elevation">
+
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/fe_tab_item_all" />
+
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/fe_tab_item_favorites" />
+
+    </com.google.android.material.tabs.TabLayout>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="@dimen/layout_marging_vertical"
+        android:layout_marginHorizontal="@dimen/layout_margin_horiontal"
+        app:cardCornerRadius="@dimen/corner_radius"
+        app:cardElevation="@dimen/elevation">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/background_with_radius_and_obvodka">
+
+            <EditText
+                android:id="@+id/et_search"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/edit_text_height"
+                android:background="@color/heavy_clouds"
+                android:drawableStart="@drawable/ic_search"
+                android:ems="10"
+                android:gravity="center"
+                android:hint="@string/fe_edit_text_hint"
+                android:paddingStart="8dp"
+                android:paddingEnd="16dp"
+                android:singleLine="true"
+                android:textAppearance="@style/text_tablayout"
+                android:textColor="@color/snow"
+                android:textColorHint="@color/snow"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageButton
+                android:id="@+id/entries_import_web"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/button_height"
+                android:background="?attr/selectableItemBackground"
+                android:src="@drawable/ic_refresh_dark"
+                app:layout_constraintEnd_toStartOf="@+id/divider2"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/et_search"
+                tools:ignore="DuplicateSpeakableTextCheck" />
+
+            <ImageButton
+                android:id="@+id/entries_select_all"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/button_height"
+                android:background="?attr/selectableItemBackground"
+                android:src="@drawable/ic_select_all"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/divider2"
+                app:layout_constraintTop_toBottomOf="@+id/et_search" />
+
+            <View
+                android:id="@+id/divider2"
+                android:layout_width="1dp"
+                android:layout_height="0dp"
+                android:background="@color/heavy_clouds"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/et_search" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+
+</LinearLayout>

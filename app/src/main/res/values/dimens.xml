@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <dimen name="design_bottom_navigation_text_size" tools:override="true">12sp</dimen>
+    <dimen name="design_bottom_navigation_active_text_size" tools:override="true">12sp</dimen>
+
+    <dimen name="layout_margin_horiontal">8dp</dimen>
+    <dimen name="layout_marging_vertical">16dp</dimen>
+
+    <dimen name="corner_radius">13dp</dimen>
+    <dimen name="elevation">3dp</dimen>
+
+    //dp вместо sp чтобы не доробатывать макеты, позже поправлю
+    <dimen name="text_size_zagolovki_big">19dp</dimen>
+    <dimen name="text_size_osnovnie_danie">15dp</dimen>
+
+    <dimen name="tv_alarm_width">230dp</dimen>
+
+    <dimen name="dialog_button_height">38dp</dimen>
+    <dimen name="dialog_width">300dp</dimen>
+
+    <dimen name="button_height">30dp</dimen>
+    <dimen name="tab_item_height">30dp</dimen>
+    <dimen name="edit_text_height">40dp</dimen>
+</resources>

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_root"
+    app:startDestination="@id/nav_passes">
+
+    <fragment
+        android:id="@+id/nav_entries"
+        android:name="developer.mihailzharkovskiy.sputniki_v_kosmose.app.presentation.screens.fragment_entries.EntriesFragment"
+        tools:layout="@layout/fragment_entries">
+        <action
+            android:id="@+id/action_entries_to_passes"
+            app:destination="@id/nav_passes" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_passes"
+        android:name="developer.mihailzharkovskiy.sputniki_v_kosmose.app.presentation.screens.fragment_satellite_above_the_user.SatAboveTheUserFragment"
+        tools:layout="@layout/fragment_sat_above_the_user">
+        <action
+            android:id="@+id/action_nav_passes_to_nav_map"
+            app:destination="@id/nav_map" />
+        <action
+            android:id="@+id/action_nav_passes_to_nav_danie_sputnika"
+            app:destination="@id/nav_danie_sputnika"
+            app:enterAnim="@anim/anim_slide_in_from_up"
+            app:exitAnim="@anim/anim_slide_out_from_down"
+            app:popEnterAnim="@anim/anim_slide_in_from_down"
+            app:popExitAnim="@anim/anim_slide_out_from_up" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_map"
+        android:name="developer.mihailzharkovskiy.sputniki_v_kosmose.app.presentation.screens.fragment_map.MapFragment"
+        tools:layout="@layout/fragment_map" />
+
+    <fragment
+        android:id="@+id/nav_danie_sputnika"
+        android:name="developer.mihailzharkovskiy.sputniki_v_kosmose.app.presentation.screens.fragment_satellite_data.SatelliteDataFragment"
+        tools:layout="@layout/fragment_satellite_data">
+        <action
+            android:id="@+id/action_danieSputnikaFragment_to_nav_map"
+            app:destination="@id/nav_map"
+            app:enterAnim="@anim/anim_slide_in_right"
+            app:exitAnim="@anim/anim_slide_out_left"
+            app:popEnterAnim="@anim/anim_slide_in_left"
+            app:popExitAnim="@anim/anim_slide_out_right" />
+    </fragment>
+
+</navigation>

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginVertical="16dp"
+    android:layout_marginHorizontal="10dp">
+
+    <!-- NB! есть причины не использовать linearlayout
+     с двумя textview и app:drawableStartCompat="" -->
+
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="14dp"
+        android:layout_height="14dp"
+        app:layout_constraintBottom_toBottomOf="@+id/textView6"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/ic_sat_okolozemnaya_orbita" />
+
+    <TextView
+        android:id="@+id/textView6"
+        style="@style/text_osnovnie_danie_na_temnom_fone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:background="@color/heavy_clouds_80"
+        android:text="@string/ipt_orbita_okolozemn"
+        app:layout_constraintStart_toEndOf="@+id/imageView3"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/imageView4"
+        android:layout_width="14dp"
+        android:layout_height="14dp"
+        android:layout_marginBottom="1dp"
+        app:layout_constraintBottom_toBottomOf="@+id/textView7"
+        app:layout_constraintStart_toStartOf="@+id/imageView3"
+        app:srcCompat="@drawable/ic_sat_geostacionarnaya_orbita" />
+
+    <TextView
+        android:id="@+id/textView7"
+        style="@style/text_osnovnie_danie_na_temnom_fone"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:background="@color/heavy_clouds_80"
+        android:text="@string/ipt_orbita_geostacionar"
+        app:layout_constraintStart_toStartOf="@+id/textView6"
+        app:layout_constraintTop_toBottomOf="@+id/textView6" />
+
+    <TextView
+        android:id="@+id/textView8"
+        style="@style/text_osnovnie_danie_na_temnom_fone"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@color/heavy_clouds_80"
+        android:text="@string/ipt_max_elev"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/textView7"
+        app:layout_constraintTop_toBottomOf="@+id/textView7" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

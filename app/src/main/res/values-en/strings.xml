@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name" translatable="false">Satellites</string>
+    <!--    <string name="placeholder" translatable="false">dummy</string>-->
+    <string name="time_shablon" translatable="false">HH:mm:ss</string>
+
+    //kompas storoni sveta
+    <string name="n">N</string>
+    <string name="ne">NE</string>
+    <string name="e">E</string>
+    <string name="se">SE</string>
+    <string name="s">S</string>
+    <string name="sw">SW</string>
+    <string name="w">W</string>
+    <string name="nw">NW</string>
+    <string name="compass_no_sensor">The device does not have a compass sensor</string>
+    <!--    <string name="compass_low_accuracy">снижение точности датчика.встрехните телефон</string>-->
+
+    //sba - snack bar alarm
+    <string name="sba_ok">OK</string>
+
+    //ul - user location
+    <string name="ul_snack_bar_no_access_to_location">"No permission to work with the location"</string>
+    <string name="ul_snack_bar_no_access_to_location_for_all_apps">"Location access may have been disabled for all apps"</string>
+    <string name="ul_snack_bar_on_gps">"Turn on the gps"</string>
+
+    //ipl - item pass leo
+    <string name="ipl_start">start</string>
+    <string name="ipl_end">end</string>
+
+    //ipt - item pass turorial
+    <string name="ipt_orbita_okolozemn">satellite in earth orbit</string>
+    <string name="ipt_orbita_geostacionar">satellite in geostationary orbit</string>
+    <string name="ipt_max_elev">max.elev. - maximum satellite elevation above the horizon</string>
+
+
+    //iph - item pass header
+    <string name="iph_no_permistion">You have not given permission to receive your location data. The app will calculate the visibility of the satellites relative to the default coordinates</string>
+    <string name="iph_button_permistion">grant permission</string>
+
+    // fe - fragment entries
+    <string name="fe_tab_item_all">all</string>
+    <string name="fe_tab_item_favorites">selected</string>
+    <string name="fe_edit_text_hint">enter a satellite name</string>
+    <string name="fe_no_data">NO DATA.\nturn on the internet and press the "refresh" button</string>
+    <string name="fe_toast">This action is not available\nin the "favorites" section." </string>
+
+    // fps - fragment prolet sptnika
+    <!--    <string name="fps_now_no_prolet_sat">there will be no satellites in your line of sight in the near future</string>-->
+    <string name="fps_now_no_prolet_sat">In the near future satellites will not fly within your line of sight</string>
+    <string name="fps_calculate_error">There was an error in the calculation of satellite positions</string>
+    <string name="fps_azimuth_communis">%.1f°(%2$s)</string>
+    <string name="fps_maxElevation">max.elev. %.1f°</string>
+    <string name="fps_startTime" translatable="false">HH:mm:ss</string>
+    <string name="fps_endTime" translatable="false">HH:mm:ss</string>
+    <string name="fps_compas">azimuth:%1$d°(%2$s)</string>
+
+    // fm - fragment map
+    <string name="fm_tab_item_icon">icon</string>
+    <string name="fm_tab_item_name">name</string>
+    <string name="fm_latitude">latitude: %.1f°</string>
+    <string name="fm_longitude">longitude: %.1f°</string>
+    <string name="fm_altitude">altitude %.0f km</string>
+    <string name="fm_range">distance: %.0f km</string>
+    <string name="fm_speed">velocity: %.2f km/s</string>
+    <string name="fm_latitude_default">latitude: 0.0°</string>
+    <string name="fm_longitude_default">longitude: 0.0°</string>
+    <string name="fm_altitude_default">altitude 0.0 km</string>
+    <string name="fm_range_default">distance: 0.0 km</string>
+    <string name="fm_speed_default">velocity: 0.0 km/s</string>
+    <string name="fm_no_date">NO DATA.\n\ngo to the "satellites" screen and add at least one satellite to your favorites</string>
+    <!--    <string name="fm_copyright" translatable="false">Wikimedia maps | Map data © OpenStreetMap contributors</string>-->
+
+    //ef- data fragment
+    <string name="ef_heder_fragment">total satellites:%s</string>
+
+    //dul - dialog user location
+    <string name="dul_obyasnenie">to allow the application to calculate which satellites are visible in your location</string>
+    <string name="dul_shapka">THE APP NEEDS ACCESS TO GEO-POSITIONING</string>
+    <string name="dul_razreshit">grant access</string>
+
+    //dsf-danie sputnika fragment
+    <string name="dsf_start_azimt">start:%.0f°(%s)</string>
+    //start:247°(ЮЗ)
+    <string name="dsf_end_azimt">end:%.0f°(%s)</string>
+    <string name="dsf_azimut_compas">azimuth: %s°</string>
+    <string name="dsf_azimut_curent">%1$.1f°(%2$s)</string>
+    <string name="dsf_azimuth_prosto">azimuth</string>
+    <string name="dsf_azimut_tekushiy">current azimuth:</string>
+    <string name="dsf_km_s" translatable="false">%.2f km/s</string>
+    <string name="dsf_km" translatable="false">%.0f km</string>
+    <string name="dsf_elevation">elevation:</string>
+    <string name="dsf_elevation_degree">%.1f°</string>
+    <string name="dsf_speed">velocity:</string>
+    <string name="dsf_range">distance:</string>
+    <string name="dsf_altitude">orbital altitude:</string>
+    <string name="dsf_button_na_karte">show on map</string>
+    <string name="dsf_button_na_o_sputnike">about the satellite</string>
+    <string name="dsf_satellite_invisible">satellite over the horizon</string>
+    <string name="dsf_uri_search_sputnik">https://www.google.com/search?q=satellite %1$s </string>
+
+    //di - dialog otsutstvuet internet
+    <string name="di_otsutstvuet_interner">NO INTERNET</string>
+    <string name="di_obyasnenie">it is not possible to update information about satellites, the application will continue its work based on the previously received data</string>
+    <string name="di_on_internet">turn on</string>
+
+    //bt - botton navigation
+    <string name="bt_entries">satellites</string>
+    <string name="bt_passes">visibility</string>
+    <string name="bt_map">map</string>
+
+</resources>

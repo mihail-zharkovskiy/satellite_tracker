@@ -1,0 +1,93 @@
+plugins {
+    id "com.android.application"
+    id "kotlin-android"
+    id "kotlin-kapt"
+    id "kotlin-parcelize"
+    id "dagger.hilt.android.plugin"
+}
+
+android {
+    compileSdkVersion 31
+    buildToolsVersion "30.0.2"
+
+    defaultConfig {
+        applicationId "developer.mihailzharkovskiy.sputniki_v_kosmose"
+        minSdkVersion 21
+        targetSdkVersion 31
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+//            buildConfigField "String", "ApiKey", props.getProperty("apiKey")
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    buildFeatures {
+        viewBinding true
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
+    }
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_11.toString()
+    }
+}
+
+dependencies {
+
+    //COROUTINES
+    def coroutinesVersion  = "1.5.2"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion"
+
+    //UI
+    implementation "androidx.appcompat:appcompat:1.4.1"
+    implementation "androidx.recyclerview:recyclerview:1.2.1"
+    implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
+    implementation "com.google.android.material:material:1.5.0"
+    implementation "androidx.constraintlayout:constraintlayout:2.1.3"
+
+    implementation "androidx.preference:preference-ktx:1.2.0"
+
+    // RETROFIT
+    def retrofitVersion = "2.9.0"
+    implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
+    implementation "com.squareup.retrofit2:converter-gson:$retrofitVersion"
+    implementation "com.google.code.gson:gson:2.8.6"
+
+    //LIFECYCLE
+    def lifecycleVersion = "2.4.1"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycleVersion"
+    implementation "androidx.lifecycle:lifecycle-extensions:2.2.0"
+
+    //NAVIGATION
+    def navigationVersion = "2.3.5" // была при нормально работе '2.3.5
+    implementation "androidx.navigation:navigation-fragment-ktx:$navigationVersion"
+    implementation "androidx.navigation:navigation-ui-ktx:$navigationVersion"
+
+    //ROOM
+    def roomVersion = "2.4.2"
+    implementation "androidx.room:room-runtime:$roomVersion"
+    implementation "androidx.room:room-ktx:$roomVersion"
+    kapt "androidx.room:room-compiler:$roomVersion"
+
+    //HILT
+    implementation "com.google.dagger:hilt-android:$hilt_version"
+    kapt "com.google.dagger:hilt-android-compiler:$hilt_version"
+
+    //MAP
+    def osmdroidVersion = "6.1.11"
+    implementation "org.osmdroid:osmdroid-android:$osmdroidVersion"
+
+    testImplementation "junit:junit:4.13.2"
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutinesVersion"
+
+    debugImplementation "com.squareup.leakcanary:leakcanary-android:2.7"
+}
