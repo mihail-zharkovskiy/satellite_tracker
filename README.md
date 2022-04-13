@@ -29,7 +29,7 @@ ___
 ### технологии:
 - язык - **kotlin**
 
-- архетектура - **clean, mvvm**
+- архетектура - **clean, mvvm, single-activity**
 
 - многопоточность - **coroutines, flow**
 
