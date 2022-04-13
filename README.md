@@ -36,7 +36,7 @@ ___
 
 - хранение данных - **room, shared preferences**
 
-- di - hilt
+- di - **hilt**
 
 - jetpack - **view binding, lifecycle, navigation component**,
 

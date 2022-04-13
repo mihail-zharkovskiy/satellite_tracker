@@ -14,9 +14,8 @@ import androidx.recyclerview.widget.SimpleItemAnimator
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import developer.mihailzharkovskiy.sputniki_v_kosmose.R
-import developer.mihailzharkovskiy.sputniki_v_kosmose.app.framework.internet.InternetState
-import developer.mihailzharkovskiy.sputniki_v_kosmose.app.framework.internet.ReceiverInternetChanges
 import developer.mihailzharkovskiy.sputniki_v_kosmose.app.presentation.common.base.BaseFragment
+import developer.mihailzharkovskiy.sputniki_v_kosmose.app.presentation.common.extention.checkInternetConnection
 import developer.mihailzharkovskiy.sputniki_v_kosmose.app.presentation.common.extention.showSnackBarAlarm
 import developer.mihailzharkovskiy.sputniki_v_kosmose.app.presentation.common.extention.toast
 import developer.mihailzharkovskiy.sputniki_v_kosmose.app.presentation.data_state.DataState
@@ -35,7 +34,6 @@ class EntriesFragment : BaseFragment<FragmentEntriesBinding>() {
 
     private val entriesAdapter: EntriesAdapter by lazy { EntriesAdapter(viewModel) }
     private val headerAdapter: EntriesAdapterHeader by lazy { EntriesAdapterHeader() }
-    private val receiver: ReceiverInternetChanges by lazy { ReceiverInternetChanges(viewModel) }
     private val viewModel: EntriesViewModel by viewModels()
     private var snackBarAlarm: Snackbar? = null
 
@@ -51,6 +49,13 @@ class EntriesFragment : BaseFragment<FragmentEntriesBinding>() {
 
         setupRecyclerView()
 
+        binding.entriesImportWeb.setOnClickListener {
+            when (requireContext().checkInternetConnection()) {
+                false -> InternetDialog.show(parentFragmentManager)
+                true -> viewModel.saveDataFromWeb()
+            }
+        }
+
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.uiState
                 .flowWithLifecycle(lifecycle, Lifecycle.State.STARTED)
@@ -60,7 +65,6 @@ class EntriesFragment : BaseFragment<FragmentEntriesBinding>() {
 
     override fun onResume() {
         super.onResume()
-        receiver.registerReceiver(requireContext())
         binding.etSearch.addTextChangedListener(viewModel)
         binding.tabLayout.addOnTabSelectedListener(viewModel)
     }
@@ -69,7 +73,6 @@ class EntriesFragment : BaseFragment<FragmentEntriesBinding>() {
         super.onPause()
         snackBarAlarm?.dismiss()
         snackBarAlarm = null
-        receiver.unRegisterReceiver(requireContext())
         binding.etSearch.removeTextChangedListener(viewModel)
         binding.tabLayout.removeOnTabSelectedListener(viewModel)
     }
@@ -90,17 +93,7 @@ class EntriesFragment : BaseFragment<FragmentEntriesBinding>() {
                     )
                 }
             }
-            is EntriesUiState.Internet -> applyInternetState(uiState.state)
             is EntriesUiState.Loading -> {}
-        }
-    }
-
-    private fun applyInternetState(state: InternetState) = when (state) {
-        is InternetState.Off -> binding.entriesImportWeb.setOnClickListener {
-            InternetDialog.show(parentFragmentManager)
-        }
-        is InternetState.On -> binding.entriesImportWeb.setOnClickListener {
-            viewModel.saveDataFromWeb()
         }
     }
 
@@ -137,7 +130,6 @@ class EntriesFragment : BaseFragment<FragmentEntriesBinding>() {
     private fun setupRecyclerView() {
         binding.entriesRecycler.apply {
             setHasFixedSize(true)
-            /**ConcatAdapter.Config.Builder().setIsolateViewTypes(false).build() дабы коректно работал viewtype**/
             adapter = ConcatAdapter(headerAdapter, entriesAdapter)
             layoutManager = createGridLayoutManager()
             (itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
@@ -145,8 +137,6 @@ class EntriesFragment : BaseFragment<FragmentEntriesBinding>() {
     }
 
     private fun createGridLayoutManager(): GridLayoutManager {
-        /**в данном случа говорим что первый элемент будт занимать всю ширину ресайклер,
-         *  а послудующие будут идти в два столбца**/
         return GridLayoutManager(requireContext(), 2).apply {
             this.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
                 override fun getSpanSize(position: Int): Int = if (position == 0) 2 else 1

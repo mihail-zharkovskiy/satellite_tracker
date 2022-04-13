@@ -7,9 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.google.android.material.tabs.TabLayout
 import dagger.hilt.android.lifecycle.HiltViewModel
 import developer.mihailzharkovskiy.sputniki_v_kosmose.app.domain.SatelliteRepository
-import developer.mihailzharkovskiy.sputniki_v_kosmose.app.framework.internet.InternetState
 import developer.mihailzharkovskiy.sputniki_v_kosmose.app.presentation.data_state.DataState
-import developer.mihailzharkovskiy.sputniki_v_kosmose.app.presentation.framework.InternetStateChanges
 import developer.mihailzharkovskiy.sputniki_v_kosmose.app.presentation.screens.fragment_entries.adapter.EntriesAdapter
 import developer.mihailzharkovskiy.sputniki_v_kosmose.app.presentation.screens.fragment_entries.mapper.mapToUiModel
 import developer.mihailzharkovskiy.sputniki_v_kosmose.app.presentation.screens.fragment_entries.model.EntriesUiModel
@@ -28,14 +26,12 @@ class EntriesViewModel @Inject constructor(
     private val repository: SatelliteRepository,
 ) : ViewModel(),
     EntriesAdapter.EntriesClickListener,
-    InternetStateChanges,
     TextWatcher,
     TabLayout.OnTabSelectedListener {
 
     private var shouldSelectAll = true
     private var jobObserveSelectedSat: Job? = null
     private var satellites = listOf<EntriesUiModel>()
-
 
     private val _uiState = MutableStateFlow<EntriesUiState>(EntriesUiState.Loading)
     val uiState: StateFlow<EntriesUiState> = _uiState.asStateFlow()
@@ -82,13 +78,6 @@ class EntriesViewModel @Inject constructor(
         }
     }
 
-    override fun callbackInternetState(internetState: InternetState) {
-        when (internetState) {
-            InternetState.On -> _uiState.value = EntriesUiState.Internet(InternetState.On)
-            InternetState.Off -> _uiState.value = EntriesUiState.Internet(InternetState.Off)
-        }
-    }
-
     override fun clickOnItemAdapter(idSatellites: Int, isSelected: Boolean) {
         viewModelScope.launch { repository.updateSelection(idSatellites, isSelected) }
     }
@@ -101,14 +90,13 @@ class EntriesViewModel @Inject constructor(
                 getAllSat()
             } else {
                 val searchResult = satellites.filter { satellite ->
-                    satellite.nameSatellite.startsWith(text,
-                        true) || satellite.nameSatellite.contains(text, true)
+                    satellite.nameSatellite.startsWith(text, true)
+                            || satellite.nameSatellite.contains(text, true)
                 }
                 _uiState.value = EntriesUiState.SectionAllSat(DataState.success(searchResult))
             }
         }
     }
-
     override fun afterTextChanged(p0: Editable?) {}
     override fun beforeTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
 
@@ -119,7 +107,6 @@ class EntriesViewModel @Inject constructor(
             1 -> viewModelScope.launch { getFavoriteSat() }
         }
     }
-
     override fun onTabUnselected(tab: TabLayout.Tab?) {}
     override fun onTabReselected(tab: TabLayout.Tab?) {}
 }
