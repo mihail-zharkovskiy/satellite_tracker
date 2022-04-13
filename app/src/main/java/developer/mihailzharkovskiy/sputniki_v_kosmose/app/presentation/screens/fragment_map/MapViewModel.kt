@@ -12,10 +12,7 @@ import developer.mihailzharkovskiy.sputniki_v_kosmose.app.presentation.common.re
 import developer.mihailzharkovskiy.sputniki_v_kosmose.app.presentation.data_state.DataState
 import developer.mihailzharkovskiy.sputniki_v_kosmose.app.presentation.framework.UserLocationSource
 import developer.mihailzharkovskiy.sputniki_v_kosmose.app.presentation.screens.fragment_map.mapper.toMapSatUiData
-import developer.mihailzharkovskiy.sputniki_v_kosmose.app.presentation.screens.fragment_map.model.MapSatUiData
 import developer.mihailzharkovskiy.sputniki_v_kosmose.app.presentation.screens.fragment_map.model.MapUiData
-import developer.mihailzharkovskiy.sputniki_v_kosmose.app.presentation.screens.fragment_map.model.convertLatitudeForMap
-import developer.mihailzharkovskiy.sputniki_v_kosmose.app.presentation.screens.fragment_map.model.convertLongitudeForMap
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -32,15 +29,15 @@ class MapViewModel @Inject constructor(
     private val resource: Resource,
 ) : ViewModel() {
 
-    private var updateJob: Job? = null
-    private val delayUpdateData: Long = 1000
+    private var renderSatellitesDataJob: Job? = null
+    private val renderDelay: Long = 1000
 
     private var selectedSat: Satellite? = null
     private var satellites: List<Satellite> = emptyList()
-    private var userLocation = Coordinates(0.0, 0.0)
+    private var userLoc = Coordinates(0.0, 0.0)
 
-    private val _uiState = MutableStateFlow<DataState<MapUiData>>(DataState.loading())
-    val uiState: StateFlow<DataState<MapUiData>> get() = _uiState.asStateFlow()
+    private val _dataState = MutableStateFlow<DataState<MapUiData>>(DataState.loading())
+    val dataState: StateFlow<DataState<MapUiData>> get() = _dataState.asStateFlow()
 
     private val _userLocationState =
         MutableStateFlow<UpdateUserLocationState>(UpdateUserLocationState.Loading)
@@ -49,28 +46,23 @@ class MapViewModel @Inject constructor(
     fun initViewModel(idSatellite: Int? = null) {
         updateUserLocation()
         viewModelScope.launch {
-            getSatellites()//.join()
-            getSelectedSat(satellites, idSatellite)//.join()
+            getSatellites().join()
+            getSelectedSat(satellites, idSatellite).join()
         }
     }
 
     fun clickOnSatellite(idSatellite: Int) = viewModelScope.launch {
-        _uiState.value = DataState.loading()
+        _dataState.value = DataState.loading()
         getSelectedSat(satellites, idSatellite)
     }
 
     fun updateUserLocation() {
-        when (val result = userLocationSource.updateUserLocation()) {
+        when (val updateState = userLocationSource.updateUserLocation()) {
             is UpdateUserLocationState.Success -> {
-                userLocation = Coordinates(result.coordinate.latitude, result.coordinate.longitude)
-                _userLocationState.value = UpdateUserLocationState.Success(userLocation)
+                userLoc = updateState.coordinate
+                _userLocationState.value = userLocationSource.updateUserLocation()
             }
-            is UpdateUserLocationState.Error -> {
-                _userLocationState.value = UpdateUserLocationState.Error(result.message)
-            }
-            is UpdateUserLocationState.Loading -> {
-                _userLocationState.value = UpdateUserLocationState.Loading
-            }
+            else -> _userLocationState.value = updateState
         }
     }
 
@@ -92,10 +84,10 @@ class MapViewModel @Inject constructor(
             val index = satellites.indexOf(selectedSat)
             if (index > 0) {
                 selectedSat = satellites[index - 1]
-                renderSatellitesData(delayUpdateData)
+                renderSatellitesData()
             } else {
                 selectedSat = satellites[satellites.size - 1]
-                renderSatellitesData(delayUpdateData)
+                renderSatellitesData()
             }
         }
     }
@@ -115,29 +107,29 @@ class MapViewModel @Inject constructor(
                 selectedSat = findSelectedSatInData(idSat, satellites)
                 renderSatellitesData()
             }
-            else -> _uiState.value = DataState.empty()
+            else -> _dataState.value = DataState.empty()
         }
     }
 
-    private fun renderSatellitesData(delayUpdate: Long = 500) = viewModelScope.launch {
-        _uiState.value = DataState.loading()
-        updateJob?.cancelAndJoin()
-        updateJob = launch {
+    private fun renderSatellitesData() = viewModelScope.launch {
+        _dataState.value = DataState.loading()
+        renderSatellitesDataJob?.cancelAndJoin()
+        renderSatellitesDataJob = launch {
             while (isActive) {
                 val date = Date()
-                val satData =
-                    getDataSat(selectedSat!!, date) //зуб даю не null. позже обязательно поправлю
-                val satTrack =
-                    getTrackSat(selectedSat!!, date) //зуб даюне null. позже обязательно поправлю
-                val positions = getPositionsSat(satellites, date)
-                delay(delayUpdate)
+                val satTrack = getTrackSat(selectedSat!!,
+                    date) //TODO(#2 зуб даю не null.позже обязательно поправлю)
+                val satellite = getDataSatellite(selectedSat!!,
+                    date) //TODO(#1 зуб даю не null.позже обязательно поправлю)
+                val satellites = getDataSatellites(satellites, date)
                 val mapDataUiState = DataState.success(MapUiData(
-                    satellites = positions,
+                    satellites = satellites,
                     satTrack = satTrack,
-                    satData = satData,
-                    satFootprint = Coordinates(satData.latitude, satData.longitude)
+                    satData = satellite,
+                    satFootprint = Coordinates(satellite.latitude, satellite.longitude)
                 ))
-                _uiState.value = mapDataUiState
+                _dataState.value = mapDataUiState
+                delay(renderDelay)
             }
         }
     }
@@ -149,27 +141,15 @@ class MapViewModel @Inject constructor(
     private suspend fun getTrackSat(sat: Satellite, date: Date): List<Coordinates> {
         val startDate = date.time
         val endDate = Date(date.time + (sat.orbitalPeriod * 2.4 * 20000L).toLong()).time
-        val trackSatellite =
-            satPositionUseCase.getTrackSatellite(sat, Coordinates(0.0, 0.0), startDate, endDate)
-                .map { satPos ->
-                    val lat = convertLatitudeForMap(Math.toDegrees(satPos.latitude))
-                    val lon = convertLongitudeForMap(Math.toDegrees(satPos.longitude))
-                    Coordinates(lat, lon)
-                }
-        return trackSatellite
+        return satPositionUseCase.getTrackSatellite(sat, userLoc, startDate, endDate)
     }
 
-    private suspend fun getPositionsSat(sats: List<Satellite>, date: Date): List<MapSatUiData> {
-        return sats.map { sat ->
-            satPositionUseCase.getPositionSat(sat, Coordinates(0.0, 0.0), date.time)
-                .toMapSatUiData(resource)
-        }
+    private suspend fun getDataSatellites(sats: List<Satellite>, date: Date) = sats.map { sat ->
+        satPositionUseCase.getPositionSat(sat, userLoc, date.time).toMapSatUiData(resource)
     }
 
-    private suspend fun getDataSat(sat: Satellite, date: Date): MapSatUiData {
-        return satPositionUseCase.getPositionSat(sat, Coordinates(0.0, 0.0), date.time)
-            .toMapSatUiData(resource)
-    }
+    private suspend fun getDataSatellite(sat: Satellite, date: Date) =
+        satPositionUseCase.getPositionSat(sat, userLoc, date.time).toMapSatUiData(resource)
 }
 
 

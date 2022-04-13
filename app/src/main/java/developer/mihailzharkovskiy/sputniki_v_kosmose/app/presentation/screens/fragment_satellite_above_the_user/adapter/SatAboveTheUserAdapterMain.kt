@@ -75,10 +75,7 @@ class SatAboveTheUserAdapterMain(
             binding.progress.progress = progress
         }
 
-        fun updateItem(
-            data: SatAboveTheUserUiModel,
-            clickListener: ClickItemListener,
-        ) {
+        fun updateItem(data: SatAboveTheUserUiModel, clickListener: ClickItemListener) {
             binding.apply {
                 passLeoName.text = data.name
                 when (data.isDeepSpace) {
@@ -100,8 +97,8 @@ class SatAboveTheUserAdapterMain(
 
         companion object {
             fun from(parent: ViewGroup): SatAboveTheUserHolder {
-                val inflater = LayoutInflater.from(parent.context)
-                return SatAboveTheUserHolder(ItemSatAboveTheUserMainBinding.inflate(inflater,
+                return SatAboveTheUserHolder(ItemSatAboveTheUserMainBinding.inflate(
+                    LayoutInflater.from(parent.context),
                     parent,
                     false))
             }
@@ -109,9 +106,4 @@ class SatAboveTheUserAdapterMain(
     }
 
     override fun getItemCount() = differ.currentList.size
-
-    override fun getItemViewType(position: Int): Int {
-        return if (differ.currentList[position].isDeepSpace) 1
-        else 0
-    }
 }

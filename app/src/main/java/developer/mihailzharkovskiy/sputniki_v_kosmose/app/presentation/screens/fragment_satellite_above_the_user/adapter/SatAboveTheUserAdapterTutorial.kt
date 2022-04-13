@@ -27,7 +27,8 @@ class SatAboveTheUserAdapterTutorial :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolderTutorial {
         val inflate = LayoutInflater.from(parent.context)
-        return ViewHolderTutorial(ItemSatAboveTheUserTutorialBinding.inflate(inflate,
+        return ViewHolderTutorial(ItemSatAboveTheUserTutorialBinding.inflate(
+            inflate,
             parent,
             false))
     }

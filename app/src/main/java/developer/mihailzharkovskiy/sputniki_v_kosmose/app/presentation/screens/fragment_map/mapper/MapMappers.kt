@@ -13,15 +13,21 @@ fun SatellitePositionDomainModel.toMapSatUiData(resource: Resource): MapSatUiDat
         name = this.name,
         latitude = convertLatitudeForMap(Math.toDegrees(this.latitude)),
         longitude = convertLongitudeForMap(Math.toDegrees(this.longitude)),
-        range = String.format(resource.getString(R.string.fm_range), this.range),
-        altitude = String.format(resource.getString(R.string.fm_altitude), this.altitude),
-        velocity = String.format(resource.getString(R.string.fm_speed), this.getOrbitalVelocity()),
+        range = String.format(
+            resource.getString(R.string.fm_range),
+            this.range),
+        altitude = String.format(
+            resource.getString(R.string.fm_altitude),
+            this.altitude),
+        velocity = String.format(
+            resource.getString(R.string.fm_speed),
+            this.getOrbitalVelocity()),
         latitudeString = String.format(
             resource.getString(R.string.fm_latitude),
-            Math.toDegrees(this.latitude)),
+            convertLatitudeForMap(Math.toDegrees(this.latitude))),
         longitudeString = String.format(
             resource.getString(R.string.fm_longitude),
-            Math.toDegrees(this.longitude))
+            convertLongitudeForMap(Math.toDegrees(this.longitude)))
     )
 }
 

@@ -53,11 +53,15 @@ class UserLocationSourceImpl @Inject constructor(
                 UpdateUserLocationState.Success(Coordinates(latitude, longitude))
             }
             permission == PermissionState.NoPermission -> {
-                UpdateUserLocationState.Error(context.getString(R.string.ul_snack_bar_no_access_to_location))
+                UpdateUserLocationState.Error(
+                    context.getString(R.string.ul_snack_bar_no_access_to_location),
+                    userLocationDefault)
             }
             else -> {
                 /**значит в настройках телефона отключил предоставление данных о местоположении для всех приложений**/
-                UpdateUserLocationState.Error(context.getString(R.string.ul_snack_bar_no_access_to_location_for_all_apps))
+                UpdateUserLocationState.Error(
+                    context.getString(R.string.ul_snack_bar_no_access_to_location_for_all_apps),
+                    userLocationDefault)
             }
         }
     }

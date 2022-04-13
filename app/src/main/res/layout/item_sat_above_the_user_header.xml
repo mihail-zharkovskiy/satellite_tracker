@@ -26,7 +26,7 @@
         android:background="@color/heavy_clouds" />
 
     <TextView
-        android:id="@+id/tv_button_v_zavisimosti_ot_state"
+        android:id="@+id/button"
         style="@style/text_osnovnie_danie_na_svetlom_fone"
         android:layout_width="match_parent"
         android:layout_height="@dimen/button_height"

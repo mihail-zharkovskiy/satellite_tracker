@@ -5,7 +5,6 @@ import developer.mihailzharkovskiy.sputniki_v_kosmose.app.di.DefaultDispatcher
 import developer.mihailzharkovskiy.sputniki_v_kosmose.app.domain.SatelliteRepository
 import developer.mihailzharkovskiy.sputniki_v_kosmose.app.domain.core_calculations.predict.Satellite
 import developer.mihailzharkovskiy.sputniki_v_kosmose.app.presentation.data_state.DataState
-import developer.mihailzharkovskiy.sputniki_v_kosmose.app.presentation.framework.UserLocationSource
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -15,7 +14,6 @@ import javax.inject.Inject
 
 class SatAboveTheUserUseCase @Inject constructor(
     private val repository: SatelliteRepository,
-    private val userLocationSource: UserLocationSource,
     @DefaultDispatcher private val dispatcherDefault: CoroutineDispatcher,
 ) {
     /**на примере hoursAhead = 3 т.е пролеты спутников буду расчитывать на ближайшие три часа**/
@@ -24,26 +22,20 @@ class SatAboveTheUserUseCase @Inject constructor(
     /**минимальная возвышение на которое спутник поднимается над горизонтом,
      * при котормо мы добавляем его в список для отслеживания **/
     private val minElevation: Double = 15.0
-
-    private var userLocation = userLocationSource.getUserLocation()
-
     private var calculateProgressJob: Job? = null
 
-    private val _satAboveTheUser =
-        MutableSharedFlow<DataState<List<SatAboveTheUserDomainModel>>>(replay = 0)
+    private val _satAboveTheUser: MutableSharedFlow<DataState<List<SatAboveTheUserDomainModel>>> =
+        MutableSharedFlow(replay = 1)
     val satAboveTheUser: SharedFlow<DataState<List<SatAboveTheUserDomainModel>>> =
         _satAboveTheUser.asSharedFlow()
 
-
-    suspend fun calculateData() {
+    suspend fun calculateData(scope: CoroutineScope, userLocation: Coordinates) {
         _satAboveTheUser.emit(DataState.loading())
-        userLocationSource.getUserLocation()
-        userLocation = userLocationSource.getUserLocation()
         withContext(dispatcherDefault) {
             val satellites = repository.getSelectedSatellitesForCalculation()
             val satellitesAboveTheUser =
                 calculationSatellitesAboveTheUserData(satellites, userLocation, Date().time)
-            calculateProgress(satellitesAboveTheUser)
+            calculateProgress(satellitesAboveTheUser, scope)
         }
     }
 
@@ -54,40 +46,35 @@ class SatAboveTheUserUseCase @Inject constructor(
     ): List<SatAboveTheUserDomainModel> {
         return withContext(dispatcherDefault) {
             val allPasses = mutableListOf<SatAboveTheUserDomainModel>()
-            satellites.forEach { satellite ->
-                allPasses.addAll(getSatAboveTheUser(satellite,
-                    userLocation,
-                    nowTime))
-            }
+            satellites.forEach { allPasses.addAll(getSatAboveTheUser(it, userLocation, nowTime)) }
             allPasses.filterSatAboveTheUser(nowTime, hoursAhead, minElevation)
         }
     }
 
-    private suspend fun calculateProgress(satellites: List<SatAboveTheUserDomainModel>) {
+    private suspend fun calculateProgress(
+        satellites: List<SatAboveTheUserDomainModel>,
+        scope: CoroutineScope,
+    ) {
         calculateProgressJob?.cancelAndJoin()
-        calculateProgressJob = coroutineScope {
-            launch(dispatcherDefault) {
-                while (isActive) {
-                    val timeNow = System.currentTimeMillis()
-                    satellites.forEach { satellite ->
-                        if (!satellite.isDeepSpace) {
-                            if (timeNow > satellite.startTime) {
-                                val deltaNow = timeNow.minus(satellite.startTime).toFloat()
-                                val deltaTotal =
-                                    satellite.endTime.minus(satellite.startTime).toFloat()
-                                satellite.progress = ((deltaNow / deltaTotal) * 100).toInt()
-                            }
+        calculateProgressJob = scope.launch(dispatcherDefault) {
+            while (isActive) {
+                val timeNow = System.currentTimeMillis()
+                satellites.forEach { satellite ->
+                    if (!satellite.isDeepSpace) {
+                        if (timeNow > satellite.startTime) {
+                            val deltaNow = timeNow.minus(satellite.startTime).toFloat()
+                            val deltaTotal = satellite.endTime.minus(satellite.startTime).toFloat()
+                            satellite.progress = ((deltaNow / deltaTotal) * 100).toInt()
                         }
                     }
-                    val result = satellites.asSequence()
-                        .filter { it.progress < 100 }
-                        .sortedBy { it.isDeepSpace }
-                        .toList()
-                    if (satellites.isEmpty()) _satAboveTheUser.emit(DataState.empty())
-                    else _satAboveTheUser.emit(DataState.success(result))
-
-                    delay(2000)
                 }
+                val result = satellites.asSequence()
+                    .filter { it.progress < 100 }
+                    .sortedBy { it.isDeepSpace }
+                    .toList()
+                if (satellites.isEmpty()) _satAboveTheUser.emit(DataState.empty())
+                else _satAboveTheUser.emit(DataState.success(result))
+                delay(2000)
             }
         }
     }
@@ -100,7 +87,7 @@ class SatAboveTheUserUseCase @Inject constructor(
         val passes = mutableListOf<SatAboveTheUserDomainModel>()
         val endDate = nowDate + hoursAhead * 60L * 60L * 1000L
         var nowTime = nowDate
-        var statrDate: Long
+        var startDate: Long
         val quarterOrbitMin = (satellite.orbitalPeriod / 4.0).toInt()
         var shouldRewind = true
         var count = 0
@@ -111,28 +98,14 @@ class SatAboveTheUserUseCase @Inject constructor(
                 do {
                     if (count > 0) shouldRewind = false
                     val pass = getLeoPass(satellite, userLocation, nowTime, shouldRewind)
-                    statrDate = pass.startTime
+                    startDate = pass.startTime
                     passes.add(pass)
                     nowTime = pass.endTime + (quarterOrbitMin * 3) * 60L * 1000L
                     count++
-                } while (statrDate < endDate)
+                } while (startDate < endDate)
             }
         }
         return passes
-    }
-
-    private fun List<SatAboveTheUserDomainModel>.filterSatAboveTheUser(
-        time: Long,
-        hoursAhead: Int,
-        minElev: Double,
-    ): List<SatAboveTheUserDomainModel> {
-        val timeFuture = time + (hoursAhead * 60L * 60L * 1000L)
-        return this.asSequence()
-            .filter { it.endTime > time }
-            .filter { it.startTime < timeFuture }
-            .filter { it.maxElevation > minElev }
-            .sortedBy { it.startTime }
-            .toList()
     }
 
     private fun getGeoPass(
@@ -228,6 +201,20 @@ class SatAboveTheUserUseCase @Inject constructor(
         val tca = (aos + los) / 2
         val elev = Math.toDegrees(maxElevation)
         return SatAboveTheUserDomainModel(aos, aosAz, los, losAz, tca, tcaAz, alt, elev, sat)
+    }
+
+    private fun List<SatAboveTheUserDomainModel>.filterSatAboveTheUser(
+        time: Long,
+        hoursAhead: Int,
+        minElev: Double,
+    ): List<SatAboveTheUserDomainModel> {
+        val timeFuture = time + (hoursAhead * 60L * 60L * 1000L)
+        return this.asSequence()
+            .filter { it.endTime > time }
+            .filter { it.startTime < timeFuture }
+            .filter { it.maxElevation > minElev }
+            .sortedBy { it.startTime }
+            .toList()
     }
 }
 

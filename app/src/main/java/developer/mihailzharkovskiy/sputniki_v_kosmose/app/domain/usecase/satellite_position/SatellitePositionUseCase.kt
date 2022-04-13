@@ -26,7 +26,7 @@ class SatellitePositionUseCase @Inject constructor(
         userPos: Coordinates,
         startTime: Long,
         endTime: Long,
-    ): List<SatellitePositionDomainModel> {
+    ): List<Coordinates> {
         return withContext(defaultDispatcher) {
             val positions = mutableListOf<SatellitePositionDomainModel>()
             var currentTime = startTime
@@ -34,7 +34,7 @@ class SatellitePositionUseCase @Inject constructor(
                 positions.add(sat.getPosition(userPos, currentTime))
                 currentTime += 15000
             }
-            positions
+            positions.map { it.getCoordinatesForMap() }
         }
     }
 }

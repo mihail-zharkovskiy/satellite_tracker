@@ -7,8 +7,8 @@ data class DataState<out T>(val status: Status, val data: T?, val message: Strin
             return DataState(status = Status.SUCCESS, data = data, message = null)
         }
 
-        fun <T> error(data: T?, message: String?): DataState<T> {
-            return DataState(status = Status.ERROR, data = data, message = message)
+        fun <T> error(message: String?): DataState<T> {
+            return DataState(status = Status.ERROR, data = null, message = message)
         }
 
         fun <T> loading(data: T? = null): DataState<T> {

@@ -70,16 +70,13 @@ class SatAboveTheUserFragment : BaseFragment<FragmentSatAboveTheUserBinding>(),
         binding.refreshLayout.isRefreshing = false
     }
 
-    private fun observeStates() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                launch { viewModel.compassEvent.collect { state -> applyCompassEvent(state) } }
-                launch { viewModel.uiState.collect { state -> applyDataState(state) } }
-                launch { viewModel.permissionStat.collect { state -> applyPermissionState(state) } }
-            }
+    private fun observeStates() = viewLifecycleOwner.lifecycleScope.launch {
+        repeatOnLifecycle(Lifecycle.State.STARTED) {
+            launch { viewModel.compassEvent.collect { state -> applyCompassEvent(state) } }
+            launch { viewModel.dataState.collect { state -> applyDataState(state) } }
+            launch { viewModel.permissionStat.collect { state -> applyPermissionState(state) } }
         }
     }
-
 
     private fun applyPermissionState(state: PermissionState) {
         when (state) {
@@ -94,13 +91,10 @@ class SatAboveTheUserFragment : BaseFragment<FragmentSatAboveTheUserBinding>(),
                 binding.tvKompasAzimut.text = event.azimuthString
                 binding.viewRingCompas.rotation = -event.azimuth.toFloat()
             }
-            is CompassEvent.Error -> {
-                requireContext().toast(event.message)
-            }
+            is CompassEvent.Error -> requireContext().toast(event.message)
             is CompassEvent.NoData -> {}
         }
     }
-
 
     private fun applyDataState(state: DataState<List<SatAboveTheUserUiModel>>) {
         when (state.status) {

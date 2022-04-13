@@ -22,8 +22,8 @@ import developer.mihailzharkovskiy.sputniki_v_kosmose.app.presentation.data_stat
 import developer.mihailzharkovskiy.sputniki_v_kosmose.app.presentation.data_state.Status
 import developer.mihailzharkovskiy.sputniki_v_kosmose.app.presentation.framework.Compass
 import developer.mihailzharkovskiy.sputniki_v_kosmose.app.presentation.screens.fragment_map.MapFragment
-import developer.mihailzharkovskiy.sputniki_v_kosmose.app.presentation.screens.fragment_satellite_data.model.SatelliteDataUiModel
-import developer.mihailzharkovskiy.sputniki_v_kosmose.app.presentation.screens.fragment_satellite_data.state.SatelliteDataUiState
+import developer.mihailzharkovskiy.sputniki_v_kosmose.app.presentation.screens.fragment_satellite_data.model.SatDataUiModel
+import developer.mihailzharkovskiy.sputniki_v_kosmose.app.presentation.screens.fragment_satellite_data.state.SatDataUiState
 import developer.mihailzharkovskiy.sputniki_v_kosmose.databinding.FragmentSatelliteDataBinding
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -31,10 +31,8 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class SatelliteDataFragment : BaseFragment<FragmentSatelliteDataBinding>() {
-
     @Inject
     lateinit var compass: Compass
-
     private val viewModel: SatelliteDataViewModel by viewModels()
 
     override fun initBinding(
@@ -75,12 +73,10 @@ class SatelliteDataFragment : BaseFragment<FragmentSatelliteDataBinding>() {
         binding.btnInformOSptnike.setOnClickListener { getInfoFromBrowser() }
     }
 
-    private fun observeStates() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                launch { viewModel.compassEvent.collect { event -> applyCompassEvent(event) } }
-                launch { viewModel.progress.collect { state -> applyUiState(state) } }
-            }
+    private fun observeStates() = viewLifecycleOwner.lifecycleScope.launch {
+        repeatOnLifecycle(Lifecycle.State.STARTED) {
+            launch { viewModel.compassEvent.collect { event -> applyCompassEvent(event) } }
+            launch { viewModel.progress.collect { state -> applyUiState(state) } }
         }
     }
 
@@ -91,52 +87,49 @@ class SatelliteDataFragment : BaseFragment<FragmentSatelliteDataBinding>() {
                 binding.viewKompasObvod.rotation = -event.azimuth.toFloat()
             }
             is CompassEvent.Error -> requireContext().toast(event.message)
-            is CompassEvent.NoData -> {}
+            is CompassEvent.NoData -> requireContext().toast(getString(R.string.fe_no_data))
         }
     }
 
-
-    private fun applyUiState(state: SatelliteDataUiState) {
+    private fun applyUiState(state: SatDataUiState) {
         when (state) {
-            is SatelliteDataUiState.SatVisible -> {
+            is SatDataUiState.SatVisible -> {
                 applyDataState(state.data)
                 binding.progressOrbita.progress = state.progress
                 binding.progressOrbita.visibleSatellites = true
                 binding.tvSatelliteInvisible.visibility = View.INVISIBLE
             }
-            is SatelliteDataUiState.SatInvisible -> {
+            is SatDataUiState.SatInvisible -> {
                 applyDataState(state.data)
                 binding.progressOrbita.visibleSatellites = false
                 binding.tvSatelliteInvisible.visibility = View.VISIBLE
             }
-            is SatelliteDataUiState.NoData -> {}
+            is SatDataUiState.NoData -> requireContext().toast(getString(R.string.fe_no_data))
         }
     }
 
-
-    private fun applyDataState(state: DataState<SatelliteDataUiModel>) = when (state.status) {
-        Status.SUCCESS -> {
-            val data = state.data
-            if (data != null) {
-                binding.tvSputnikVisota.text = data.altitude
-                binding.tvSputnikSkorost.text = data.velocity
-                binding.tvSputnikElevation.text = data.elevation
-                binding.tvSputnikUdalenieOtUser.text = data.range
-                binding.tvSputnikAzimutCuration.text = data.azimuth
-            } else {
-                requireContext().toast("error")
+    private fun applyDataState(state: DataState<SatDataUiModel>) {
+        when (state.status) {
+            Status.SUCCESS -> {
+                val data = state.data
+                if (data != null) {
+                    binding.tvSputnikVisota.text = data.altitude
+                    binding.tvSputnikSkorost.text = data.velocity
+                    binding.tvSputnikElevation.text = data.elevation
+                    binding.tvSputnikUdalenieOtUser.text = data.range
+                    binding.tvSputnikAzimutCuration.text = data.azimuth
+                } else requireContext().toast("error")
             }
+            Status.LOADING -> {}
+            Status.EMPTY -> {}
+            Status.ERROR -> {}
         }
-        Status.LOADING -> {}
-        Status.EMPTY -> {}
-        Status.ERROR -> {}
     }
 
     private fun seeOnTheMap(data: SatAboveTheUserDomainModel) {
         findNavController().navigate(
             R.id.action_danieSputnikaFragment_to_nav_map,
-            bundleOf(MapFragment.KEY_SPUTNIK to data.satId)
-        )
+            bundleOf(MapFragment.KEY_SPUTNIK to data.satId))
     }
 
     private fun getInfoFromBrowser() {

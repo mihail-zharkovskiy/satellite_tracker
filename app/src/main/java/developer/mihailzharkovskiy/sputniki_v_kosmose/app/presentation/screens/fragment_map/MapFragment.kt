@@ -31,12 +31,7 @@ class MapFragment : BaseFragment<FragmentMapBinding>(), MapViewWrapper.ClickOnMa
 
     private var map: MapViewWrapper? = null
     private var snackBarAlarm: Snackbar? = null
-    private val viewModel: MapViewModel by lazy {
-        val viewModel: MapViewModel by viewModels()
-        viewModel.initViewModel(arguments?.getInt(KEY_SPUTNIK))
-        viewModel
-    }
-
+    private val viewModel: MapViewModel by viewModels()
 
     override fun initBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentMapBinding {
         return FragmentMapBinding.inflate(inflater, container, false)
@@ -44,24 +39,9 @@ class MapFragment : BaseFragment<FragmentMapBinding>(), MapViewWrapper.ClickOnMa
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        map = MapViewWrapper(binding.mapView, this)
-
-//        viewModel.initViewModel(arguments?.getInt(KEY_SPUTNIK))
-
-        viewLifecycleOwner.lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                launch { viewModel.uiState.collect { state -> applyMapUiState(state) } }
-                launch { viewModel.userLocationState.collect { state -> applyUserLocationState(state) } }
-            }
-        }
-
-        with(binding) {
-            btUpdateLocation.setOnClickListener { viewModel.updateUserLocation() }
-            mapBtnBack.setOnClickListener { viewModel.switchToSatelliteBack() }
-            mapBtnNext.setOnClickListener { viewModel.switchToSatelliteNext() }
-            mapDataName.setOnClickListener { getInformFromBrowser() }
-        }
+        initView()
+        observeUiState()
+        viewModel.initViewModel(arguments?.getInt(KEY_SPUTNIK))
     }
 
     override fun onResume() {
@@ -85,6 +65,23 @@ class MapFragment : BaseFragment<FragmentMapBinding>(), MapViewWrapper.ClickOnMa
         viewModel.clickOnSatellite(idSatellite)
     }
 
+    private fun initView() {
+        map = MapViewWrapper(binding.mapView, this)
+        with(binding) {
+            btUpdateLocation.setOnClickListener { viewModel.updateUserLocation() }
+            mapBtnBack.setOnClickListener { viewModel.switchToSatelliteBack() }
+            mapBtnNext.setOnClickListener { viewModel.switchToSatelliteNext() }
+            mapDataName.setOnClickListener { getInformFromBrowser() }
+        }
+    }
+
+    private fun observeUiState() = viewLifecycleOwner.lifecycleScope.launch {
+        repeatOnLifecycle(Lifecycle.State.STARTED) {
+            launch { viewModel.dataState.collect { state -> applyMapUiState(state) } }
+            launch { viewModel.userLocationState.collect { state -> applyUserLocationState(state) } }
+        }
+    }
+
     private fun applyUserLocationState(state: UpdateUserLocationState) {
         when (state) {
             is UpdateUserLocationState.Success -> {
@@ -105,7 +102,7 @@ class MapFragment : BaseFragment<FragmentMapBinding>(), MapViewWrapper.ClickOnMa
                 binding.mapDataName.isEnabled = true
                 if (state.data != null) {
                     renderSatellitesOnMap(state.data)
-                    renderSateliteData(state.data.satData)
+                    renderSatelliteData(state.data.satData)
                 }
             }
             Status.LOADING -> {
@@ -130,7 +127,7 @@ class MapFragment : BaseFragment<FragmentMapBinding>(), MapViewWrapper.ClickOnMa
         )
     }
 
-    private fun renderSateliteData(data: MapSatUiData) {
+    private fun renderSatelliteData(data: MapSatUiData) {
         binding.apply {
             mapDataName.text = data.name
             mapDataAlt.text = data.altitude
@@ -142,9 +139,8 @@ class MapFragment : BaseFragment<FragmentMapBinding>(), MapViewWrapper.ClickOnMa
     }
 
     private fun getInformFromBrowser() {
-        val uri =
-            Uri.parse(String.format(requireContext().getString(R.string.dsf_uri_search_sputnik),
-                binding.mapDataName.text))
+        val uri = Uri.parse(String.format(getString(R.string.dsf_uri_search_sputnik),
+            binding.mapDataName.text))
         val intent = Intent(Intent.ACTION_VIEW, uri)
         intent.addCategory(Intent.CATEGORY_BROWSABLE)
         startActivity(intent)
@@ -157,12 +153,11 @@ class MapFragment : BaseFragment<FragmentMapBinding>(), MapViewWrapper.ClickOnMa
                 1 -> map?.showIcon = false
             }
         }
-
         override fun onTabUnselected(tab: TabLayout.Tab?) {}
         override fun onTabReselected(tab: TabLayout.Tab?) {}
     }
 
     companion object {
-        const val KEY_SPUTNIK = "catNum"
+        const val KEY_SPUTNIK = "KEY_SPUTNIK_FOR_MAP"
     }
 }

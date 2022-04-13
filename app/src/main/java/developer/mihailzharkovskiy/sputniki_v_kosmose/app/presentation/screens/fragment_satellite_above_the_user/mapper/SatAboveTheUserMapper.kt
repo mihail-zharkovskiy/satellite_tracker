@@ -8,7 +8,7 @@ import developer.mihailzharkovskiy.sputniki_v_kosmose.app.presentation.screens.f
 import java.text.SimpleDateFormat
 import java.util.*
 
-fun SatAboveTheUserDomainModel.mapToSatAboveTheUserUiModel(resource: Resource): SatAboveTheUserUiModel {
+fun SatAboveTheUserDomainModel.toSatAboveTheUserUiModel(resource: Resource): SatAboveTheUserUiModel {
     return SatAboveTheUserUiModel(
         satId = this.satId,
         name = this.name,

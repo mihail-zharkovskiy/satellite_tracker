@@ -1,5 +1,8 @@
 package developer.mihailzharkovskiy.sputniki_v_kosmose.app.domain.usecase.satellite_position
 
+import developer.mihailzharkovskiy.sputniki_v_kosmose.app.Coordinates
+import developer.mihailzharkovskiy.sputniki_v_kosmose.app.presentation.screens.fragment_map.model.convertLatitudeForMap
+import developer.mihailzharkovskiy.sputniki_v_kosmose.app.presentation.screens.fragment_map.model.convertLongitudeForMap
 import kotlin.math.pow
 import kotlin.math.sqrt
 
@@ -27,5 +30,11 @@ data class SatellitePositionDomainModel(
         val earthM = 5.98 * 10.0.pow(24)
         val radius = 6.37 * 10.0.pow(6) + altitude * 10.0.pow(3)
         return sqrt(earthG * earthM / radius) / 1000
+    }
+
+    fun getCoordinatesForMap(): Coordinates {
+        val lat = convertLatitudeForMap(Math.toDegrees(latitude))
+        val lon = convertLongitudeForMap(Math.toDegrees(longitude))
+        return Coordinates(latitude = lat, longitude = lon)
     }
 }
