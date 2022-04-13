@@ -2,11 +2,11 @@
 
 ___
 
-[![](https://w7.pngwing.com/pngs/733/638/png-transparent-google-play-text-google-play-android-app-store-google-play-text-logo-sign.png)](https://play.google.com/store/apps/details?id=developer.mihailzharkovskiy.sputniki_v_kosmose&hl=ru&gl=US)
+[![](https://camo.githubusercontent.com/a5ca0e52bb4a41baa3453cf67cbad338765a917fd8592a50fa96c20a53688d9a/68747470733a2f2f617661746172732e6d64732e79616e6465782e6e65742f693f69643d61633064633465663138613263356535633863343635633964623234333638642d343537363334352d696d616765732d7468756d6273266e3d3133)](https://play.google.com/store/apps/details?id=developer.mihailzharkovskiy.sputniki_v_kosmose&hl=ru&gl=US)
 
 ___
 
-### Приложений позволяет в реальном времени отслеживать нахожение спутников.
+### Приложений позволяет в реальном времени отслеживать нахождение спутников.
 
 ### **особенности приложения:**
 
@@ -28,7 +28,7 @@ ___
 ### технологии:
 - язык - **kotlin**
 
-- архетектура - **clean, mvvm**
+- архетектура - **clean, mvvm, single-activity**
 
 - многопоточность - **coroutines, flow**
 
